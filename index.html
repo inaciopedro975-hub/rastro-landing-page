@@ -23,15 +23,40 @@
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230C0F14'/%3E%3Crect x='6' y='6' width='2.5' height='20' fill='%23F4F3EF'/%3E%3Crect x='13' y='10' width='2.5' height='16' fill='%23F4F3EF' opacity='.6'/%3E%3Crect x='20' y='15' width='2.5' height='11' fill='%23F4F3EF' opacity='.3'/%3E%3C/svg%3E">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Carregamento bloqueante, de propósito. A versão assíncrona pintava a
-     página ~200ms antes, mas o título aparecia na fonte do sistema e trocava
-     para a Big Shoulders na sequência — o flash não compensa numa página cuja
-     identidade é a própria tipografia. -->
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700&family=Instrument+Sans:wght@400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Fontes no próprio domínio, não no Google.
+     Antes: HTML → conexão nova com fonts.googleapis.com → esperar o CSS →
+     descobrir as URLs → conexão nova com fonts.gstatic.com → baixar → pintar.
+     Duas negociações TLS em série antes do primeiro pixel, e era isso que
+     segurava FCP e LCP em 3,2s no celular.
+     Agora os arquivos vêm da mesma conexão que já trouxe o HTML, o @font-face
+     está embutido (zero requisição de CSS) e o preload começa o download da
+     fonte do título junto com a leitura do HTML.
+     São fontes variáveis: 3 arquivos cobrem os 5 pesos usados. -->
+<link rel="preload" href="fontes/big-shoulders.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fontes/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
 
 <style>
+/* ---------- Fontes locais ------------------------------------------------
+   font-display:swap mantém o texto visível durante o download. Como os
+   arquivos vêm da mesma conexão e com preload, a janela de troca é curta
+   demais para virar aquele flash que reprovamos antes.
+   -------------------------------------------------------------------------- */
+@font-face{
+  font-family:"Big Shoulders Display";
+  src:url("fontes/big-shoulders.woff2") format("woff2");
+  font-weight:600 700;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:"Instrument Sans";
+  src:url("fontes/instrument-sans.woff2") format("woff2");
+  font-weight:400;font-style:normal;font-display:swap;
+}
+/* A JetBrains Mono saiu: custava 30,6 KB (37% do peso de fontes) e uma
+   requisição inteira, só para os rótulos pequenos em caixa alta. A mono do
+   sistema já vem instalada — zero download. Em 11px com .16em de espaçamento
+   o desenho da letra quase não conta; o que carrega o estilo aqui é a caixa
+   alta e o tracking, que continuam. */
+
 /* =========================================================================
    RASTRO
    Assinatura visual: uma linha vermelha atravessa a página inteira e cresce
@@ -58,7 +83,7 @@
 
   --display:"Big Shoulders Display","Big Shoulders",Impact,sans-serif;
   --body:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,"Roboto Mono",Consolas,monospace;
 
   --wrap:1180px;
   --pad:22px;
