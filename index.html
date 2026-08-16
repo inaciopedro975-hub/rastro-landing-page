@@ -232,13 +232,9 @@ p:last-child{margin-bottom:0}
 @media (max-width:479px){ .btn{width:100%} }
 .cta{margin-top:38px}
 .cta .mono{margin-top:16px;color:var(--steel)}
-/* Botão secundário: fantasma, para não competir com o vermelho do principal. */
-.btn--fantasma{background:transparent;border:1px solid var(--line-d);color:var(--paper)}
-.btn--fantasma:hover{background:rgba(255,255,255,.06);border-color:var(--steel);transform:translateY(-1px)}
-.cta--dupla{display:flex;flex-wrap:wrap;gap:12px}
-/* width:100% no container, senão o flex em coluna encolhe ao conteúdo e os
-   botões saem com 261px de 346 — estreitos e de larguras diferentes entre si. */
-@media (max-width:479px){ .cta--dupla{flex-direction:column;width:100%} }
+/* No celular o botão ocupa a coluna inteira. Sem o width no container, o
+   flex encolhe ao conteúdo e o botão sai com 261px de 346. */
+.hero .cta{width:100%}
 .on-paper .cta .mono{color:var(--ink-60)}
 
 /* ---------- Hero -------------------------------------------------------- */
@@ -257,9 +253,12 @@ p:last-child{margin-bottom:0}
 }
 .hero__inner{text-align:center;display:flex;flex-direction:column;align-items:center}
 
-/* Três linhas do mesmo corpo: a frase do cliente é uma sentença só e quebrar
-   em tamanhos diferentes descaracterizava a leitura dela. */
-.h1-a,.h1-b,.h1-c{display:block;line-height:.94}
+/* Dois versos com pesos visuais diferentes: o primeiro monta a frase, o
+   segundo é o golpe. Tamanhos e cores distintos criam a hierarquia que três
+   linhas iguais não davam. */
+.h1-a,.h1-b{display:block;line-height:.94}
+.h1-a{font-size:.62em;color:var(--steel-lo)}
+.h1-b{color:var(--signal);margin-top:.06em}
 
 /* width:100% é o que libera o tamanho: dentro de um flex com align-items
    center o h1 encolhia até a linha mais longa (297px de 346 disponíveis) e
@@ -685,22 +684,22 @@ p:last-child{margin-bottom:0}
 <section class="sec hero on-deep">
   <div class="wrap hero__inner">
     <h1 class="rise">
-      <span class="h1-a">A experiência</span>
-      <span class="h1-b">de quem vende,</span>
-      <span class="h1-c dim">transformada em método.</span>
+      <span class="h1-a">A experiência de quem vende,</span>
+      <span class="h1-b">transformada em método.</span>
     </h1>
 
     <!-- O que está sendo vendido tem que ficar claro aqui, não três seções
          abaixo: operadores reais, vendendo hoje, abrindo o processo ao vivo,
          primeira turma, 20 pessoas. -->
-    <p class="lede rise">Gabriel, Sávio e Paulo comercializaram mais de R$17 milhões e seguem vendendo todo dia. Na Turma Fundadora eles abrem ao vivo o processo que usam — para 20 pessoas, na primeira turma da RASTRO.</p>
+    <p class="lede rise">Mais de R$17 milhões em vendas transformados em método. Pela primeira vez, o processo por trás desses resultados será aberto ao vivo para uma turma exclusiva de apenas 20 pessoas.</p>
 
-    <div class="cta cta--dupla rise">
+    <!-- Um CTA só. O botão fantasma "Conhecer a RASTRO" saiu: dois botões
+         empilhados no celular dobravam a altura e diluíam a decisão. -->
+    <div class="cta rise">
       <a class="btn" href="#oferta" data-cta="cta_hero">
         Quero a Turma Fundadora
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9.5M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a class="btn btn--fantasma" href="#a-empresa">Conhecer a RASTRO</a>
     </div>
   </div>
 
@@ -849,14 +848,6 @@ p:last-child{margin-bottom:0}
       <li class="leg"><span class="leg__dot" aria-hidden="true"></span><span class="leg__n mono">Etapa 08</span><h3 class="leg__t">Indicação</h3><p>Transformar cliente fechado em dois novos clientes.</p></li>
     </ol>
 
-    <!-- Sem este CTA havia ~8 telas de rolagem entre o botão do topo e o
-         próximo — tempo demais para quem chegou decidido. -->
-    <div class="cta rise">
-      <a class="btn" href="#oferta" data-cta="cta_metodo">
-        Quero fazer parte da RASTRO
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9.5M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
   </div>
 </section>
 
