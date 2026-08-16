@@ -1135,9 +1135,9 @@ p:last-child{margin-bottom:0}
      CONFIGURAÇÃO — único bloco a editar antes do deploy.
      ====================================================================== */
   var CONFIG = {
-    // PENDENTE — URL do checkout da Hotmart, sem query string.
-    // Vazia: os CTAs rolam até a oferta em vez de virar link morto.
-    checkoutUrl: '',
+    // Checkout da Hotmart. O código já lida com a query string existente:
+    // como a URL tem "?", os UTMs entram com "&".
+    checkoutUrl: 'https://pay.hotmart.com/L107136690J?bid=1786920252876',
     metaPixelId: '',
     ga4Id: '',
     utm: { source:'instagram', medium:'bio', campaign:'turma_fundadora' }
