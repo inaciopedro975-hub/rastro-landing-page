@@ -255,6 +255,11 @@ p:last-child{margin-bottom:0}
   font-family:var(--display);font-weight:700;text-transform:uppercase;
   font-size:1.5rem;line-height:1;letter-spacing:.04em;color:var(--paper);
 }
+/* A marca tipográfica é o padrão; a imagem só entra depois de carregar. */
+.brand__txt{display:inline-flex;align-items:center;gap:11px}
+.brand__img{display:none;height:clamp(30px,4.4vw,38px);width:auto}
+.brand.com-logo .brand__img{display:block}
+.brand.com-logo .brand__txt{display:none}
 .hero{padding-top:clamp(38px,5.5vw,66px)}
 .hero::before{
   content:"";position:absolute;left:0;right:0;top:-130px;height:940px;pointer-events:none;z-index:0;
@@ -676,14 +681,20 @@ p:last-child{margin-bottom:0}
 
   <header class="top">
     <div class="wrap">
-      <!-- PENDENTE: trocar pelo logo oficial em SVG quando existir. -->
+      <!-- Encaixe da logo oficial. Basta salvar o arquivo em marca/rastro.png
+           (ou trocar a extensão para .svg, que é melhor) — ele aparece sozinho.
+           Enquanto o arquivo não existir, o onerror mantém a marca tipográfica
+           abaixo, então o cabeçalho nunca fica com ícone quebrado. -->
       <a class="brand" href="#" aria-label="RASTRO — Performance Comercial">
-        <svg width="22" height="26" viewBox="0 0 22 26" aria-hidden="true" focusable="false">
-          <rect x="0" y="0" width="3" height="26" fill="#F4F3EF"/>
-          <rect x="7" y="5" width="3" height="21" fill="#F4F3EF" opacity=".6"/>
-          <rect x="14" y="11" width="3" height="15" fill="#F4F3EF" opacity=".3"/>
-        </svg>
-        RASTRO
+        <img class="brand__img" src="marca/rastro.png" alt="RASTRO" width="160" height="36" decoding="async">
+        <span class="brand__txt">
+          <svg width="22" height="26" viewBox="0 0 22 26" aria-hidden="true" focusable="false">
+            <rect x="0" y="0" width="3" height="26" fill="#F4F3EF"/>
+            <rect x="7" y="5" width="3" height="21" fill="#F4F3EF" opacity=".6"/>
+            <rect x="14" y="11" width="3" height="15" fill="#F4F3EF" opacity=".3"/>
+          </svg>
+          RASTRO
+        </span>
       </a>
     </div>
   </header>
@@ -1145,6 +1156,15 @@ p:last-child{margin-bottom:0}
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var hasIO  = 'IntersectionObserver' in window;
+
+  /* ---------- Logo: troca a marca tipográfica quando o arquivo existir --- */
+  (function(){
+    var img = document.querySelector('.brand__img');
+    if (!img) return;
+    function mostrar(){ img.closest('.brand').classList.add('com-logo'); }
+    if (img.complete && img.naturalWidth > 0) mostrar();
+    else img.addEventListener('load', mostrar);
+  })();
 
   /* ---------- Retratos: monograma se a foto faltar --------------------- */
   Array.prototype.forEach.call(document.querySelectorAll('.bio__shot img'), function(img){
