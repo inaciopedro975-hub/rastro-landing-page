@@ -1,0 +1,1246 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0C0F14">
+
+<title>RASTRO | Performance Comercial — Turma Fundadora</title>
+<meta name="description" content="Gabriel, Sávio e Paulo comercializaram mais de R$17 milhões e seguem vendendo todo dia. Na Turma Fundadora eles abrem o processo ao vivo, para 20 pessoas.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://rastro.com.br/">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="RASTRO">
+<meta property="og:title" content="RASTRO | Performance Comercial — Turma Fundadora">
+<meta property="og:description" content="Gabriel, Sávio e Paulo comercializaram mais de R$17 milhões e seguem vendendo todo dia. Na Turma Fundadora eles abrem o processo ao vivo, para 20 pessoas.">
+<meta property="og:url" content="https://rastro.com.br/">
+<meta property="og:image" content="https://rastro.com.br/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230C0F14'/%3E%3Crect x='6' y='6' width='2.5' height='20' fill='%23F4F3EF'/%3E%3Crect x='13' y='10' width='2.5' height='16' fill='%23F4F3EF' opacity='.6'/%3E%3Crect x='20' y='15' width='2.5' height='11' fill='%23F4F3EF' opacity='.3'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Carregamento bloqueante, de propósito. A versão assíncrona pintava a
+     página ~200ms antes, mas o título aparecia na fonte do sistema e trocava
+     para a Big Shoulders na sequência — o flash não compensa numa página cuja
+     identidade é a própria tipografia. -->
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700&family=Instrument+Sans:wght@400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================================
+   RASTRO
+   Assinatura visual: uma linha vermelha atravessa a página inteira e cresce
+   conforme a pessoa rola. É literalmente o rastro que o percurso deixa. Ela
+   nasce no topo, vira a espinha das 8 etapas do método, cruza a virada de
+   preto para branco e termina no fechamento.
+   ========================================================================= */
+:root{
+  --deep:#0C0F14;
+  --deep-2:#141922;
+  --paper:#F4F3EF;
+  --paper-2:#FAFAF8;
+  --ink:#0C0F14;
+  --ink-60:#5A606B;
+  --steel:#8A94A6;
+  --steel-lo:#B7BECB;
+  --signal:#C7300E;
+  /* Mesmo papel, só levantado para ser legível: #C7300E em 11px sobre o
+     escuro dá 3.53:1 e reprova AA. Só vale sobre fundo escuro — no claro
+     cairia para 3.78:1, pior que o original (que ali dá 4.90:1). */
+  --signal-lift:#D15337;
+  --line-d:rgba(255,255,255,.12);
+  --line-l:#DEDCD5;
+
+  --display:"Big Shoulders Display","Big Shoulders",Impact,sans-serif;
+  --body:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --wrap:1180px;
+  --pad:22px;
+  --gut:30px;              /* recuo do conteúdo em relação ao rastro */
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --p:0;                   /* progresso do rastro, 0 a 1 */
+}
+@media (min-width:768px){ :root{--pad:40px;--gut:76px} }
+@media (min-width:1200px){ :root{--pad:56px;--gut:96px} }
+
+*,*::before,*::after{box-sizing:border-box}
+/* O sangramento da foto usa 100vw, que inclui a barra de rolagem e sobra
+   alguns px. `clip` corta sem criar contexto de rolagem — ao contrário de
+   `hidden`, que quebraria position:sticky. `hidden` fica de reserva. */
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:hidden;overflow-x:clip}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+body{
+  margin:0;background:var(--deep);color:var(--steel-lo);
+  font-family:var(--body);font-size:16.5px;line-height:1.6;
+  overflow-x:hidden;overflow-x:clip;-webkit-font-smoothing:antialiased;
+}
+@media (max-width:767px){ body{padding-bottom:74px} }
+
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+
+h1,h2,h3{
+  font-family:var(--display);font-weight:600;text-transform:uppercase;
+  line-height:.94;margin:0;
+}
+h1{font-size:clamp(2.6rem,9.2vw,6.4rem)}
+h2{font-size:clamp(2rem,5.6vw,3.6rem);text-wrap:balance}
+h3{font-size:1.28rem;font-weight:700}
+p{margin:0 0 1.05rem}
+p:last-child{margin-bottom:0}
+.lede{font-size:clamp(1.02rem,2vw,1.16rem);line-height:1.6}
+
+/* Rótulo em mono: recurso raro de propósito. Só 3 seções o usam. */
+.label{
+  font-family:var(--mono);font-size:12px;font-weight:500;line-height:1;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--signal);
+  margin:0 0 22px;display:block;
+}
+.on-deep .label{color:var(--signal-lift)}
+.mono{
+  font-family:var(--mono);font-size:12px;font-weight:400;
+  letter-spacing:.16em;text-transform:uppercase;line-height:1.5;
+}
+@media (min-width:768px){ .mono,.label{font-size:11px} }
+
+.dim{color:var(--steel)}
+.on-paper .dim{color:var(--ink-60)}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:99;
+  background:var(--paper);color:var(--ink);padding:12px 20px;border-radius:2px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+}
+.skip:focus{left:12px;top:12px}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+
+/* ---------- Estrutura --------------------------------------------------- */
+.page{position:relative}
+.wrap{width:100%;max-width:var(--wrap);margin-inline:auto;padding-inline:var(--pad)}
+/* Conteúdo recuado do rastro: a linha nunca passa por cima de texto.
+   Soma ao padding do .wrap — usar só `padding-left:var(--gut)` sobrescreveria
+   o `padding-inline` do .wrap e jogaria o conteúdo (e os nós) para fora de
+   alinhamento com a linha. */
+.col{padding-left:calc(var(--pad) + var(--gut))}
+.sec{position:relative;padding-block:clamp(76px,9vw,124px)}
+.sec > *{position:relative;z-index:1}
+.on-deep{background:var(--deep);color:var(--steel-lo)}
+.on-deep h1,.on-deep h2,.on-deep h3{color:var(--paper)}
+.on-paper{background:var(--paper);color:var(--ink-60)}
+.on-paper h1,.on-paper h2,.on-paper h3{color:var(--ink)}
+.on-paper-2{background:var(--paper-2)}
+
+/* ---------- O RASTRO ----------------------------------------------------
+   Uma linha só, absoluta sobre a página inteira, acima dos fundos de seção.
+   A base é um cinza de alfa médio que lê tanto no preto quanto no branco;
+   a tinta vermelha por cima cresce com o scroll.
+   ------------------------------------------------------------------------ */
+.trail{position:absolute;inset:0;pointer-events:none;z-index:4}
+.trail__base,.trail__ink{
+  position:absolute;top:0;width:2px;
+  left:max(var(--pad), calc(50% - (var(--wrap) / 2) + var(--pad)));
+}
+.trail__base{bottom:0;background:rgba(138,148,166,.30)}
+/* A altura acompanha o scroll. A transição curta é de propósito: a linha
+   chega um instante depois do movimento, como tinta correndo atrás — é o que
+   faz parecer rastro em vez de barra de progresso. Longa demais e ela atrasa;
+   zerada e fica dura. */
+.trail__ink{
+  height:calc(var(--p) * 100%);background:var(--signal);
+  transition:height 120ms linear;
+}
+.trail.is-live .trail__tip{opacity:1}
+/* Ponta viva: marca onde a leitura está agora. */
+.trail__tip{
+  position:absolute;bottom:-4px;left:-3px;width:8px;height:8px;border-radius:50%;
+  background:var(--signal);box-shadow:0 0 0 4px rgba(199,48,14,.22);
+  opacity:0;transition:opacity 400ms var(--ease);
+}
+
+/* ---------- Botão -------------------------------------------------------
+   Reto, quase sem raio. O vermelho é assinatura da marca, não enfeite: só
+   4 CTAs na página inteira.
+   ------------------------------------------------------------------------ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  min-height:56px;padding:0 30px;
+  background:var(--signal);color:#fff;border:0;border-radius:2px;cursor:pointer;
+  font-family:var(--display);font-weight:700;text-transform:uppercase;
+  font-size:1.14rem;line-height:1;letter-spacing:.02em;text-decoration:none;
+  transition:background 200ms var(--ease),transform 200ms var(--ease);
+}
+.btn svg{flex:none;transition:transform 200ms var(--ease)}
+.btn:hover{background:#A82708;transform:translateY(-1px)}
+.btn:hover svg{transform:translateX(4px)}
+.btn:active{transform:translateY(0)}
+@media (max-width:479px){ .btn{width:100%} }
+.cta{margin-top:38px}
+.cta .mono{margin-top:16px;color:var(--steel)}
+.on-paper .cta .mono{color:var(--ink-60)}
+
+/* ---------- Hero -------------------------------------------------------- */
+.top{padding-block:26px 0;position:relative;z-index:5;background:transparent}
+.brand{
+  display:inline-flex;align-items:center;gap:11px;text-decoration:none;
+  font-family:var(--display);font-weight:700;text-transform:uppercase;
+  font-size:1.5rem;line-height:1;letter-spacing:.04em;color:var(--paper);
+}
+.hero{padding-top:clamp(38px,5.5vw,66px)}
+.hero::before{
+  content:"";position:absolute;left:0;right:0;top:-130px;height:940px;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 62% at 50% 4%, rgba(154,170,198,.30), transparent 64%),
+    radial-gradient(ellipse 40% 38% at 50% 0%, rgba(200,214,240,.20), transparent 72%);
+}
+.hero__inner{text-align:center;display:flex;flex-direction:column;align-items:center}
+
+.h1-a,.h1-b,.h1-c{display:block;line-height:.9}
+.h1-a{font-size:clamp(1.6rem,4.6vw,3.2rem);color:var(--steel-lo)}
+.h1-b{font-size:clamp(2.1rem,6.2vw,4.4rem);margin-top:.06em}
+.h1-c{font-size:clamp(3.4rem,13.4vw,9.2rem);margin-top:.04em;letter-spacing:-.01em}
+.rot{display:inline-block;position:relative;overflow:hidden;vertical-align:bottom;height:.94em;color:var(--signal)}
+.rot__w{display:block;transition:transform 520ms var(--ease),opacity 520ms var(--ease)}
+.rot__w.is-out{transform:translateY(-104%);opacity:0}
+.rot__w.is-next{position:absolute;left:0;top:0;transform:translateY(104%);opacity:0}
+.rot__w.is-next.is-in{transform:translateY(0);opacity:1}
+
+.hero .lede{margin-top:clamp(20px,2.6vw,30px);max-width:50ch;color:var(--steel-lo)}
+.hero .cta{margin-top:clamp(26px,3vw,36px)}
+
+/* Prova acima da dobra — sem caixa nenhuma.
+   Uma frase enquadra os três números e diz por que eles importam; sem ela
+   viravam três células paralelas de dashboard. Os rótulos saem do mono caixa
+   alta: quatro linhas em caixa alta no mesmo bloco pesam demais, e a frase de
+   cima já é a voz do mono aqui. Fios de 1px amarram os três num bloco só. */
+.proof{margin-top:clamp(46px,6vw,82px);padding-top:26px;border-top:1px solid var(--line-d)}
+.proof__frame{margin:0 0 clamp(22px,2.6vw,34px);color:var(--steel)}
+.proof__row{display:grid;grid-template-columns:1fr;gap:28px}
+@media (min-width:640px){
+  .proof__row{grid-template-columns:repeat(3,1fr);gap:0}
+  .proof__row > * + *{padding-left:clamp(24px,3vw,46px);border-left:1px solid var(--line-d)}
+}
+.proof__n{
+  display:block;font-family:var(--display);font-weight:600;line-height:.86;
+  font-size:clamp(2.9rem,7vw,4.6rem);color:var(--paper);letter-spacing:-.01em;
+}
+.proof__l{display:block;margin-top:12px;color:var(--steel);font-size:14.5px;line-height:1.4}
+
+/* ---------- Fundadores — bandas editoriais ------------------------------
+   Sem cards. Foto grande sangrando na direita, texto na coluna do rastro.
+   Gabriel e Sávio são a origem do método; Paulo entra depois, com o papel
+   dele explicado — por isso a banda dele é outra.
+   ------------------------------------------------------------------------ */
+.bio{position:relative;display:grid;grid-template-columns:1fr;gap:26px;align-items:center}
+.bio + .bio{margin-top:clamp(64px,8vw,116px)}
+@media (min-width:900px){
+  .bio{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:56px}
+}
+/* margin:0 fica aqui, não inline no <figure>: inline venceria o sangramento
+   negativo da media query e a foto pararia na borda do container. */
+.bio__shot{position:relative;overflow:hidden;aspect-ratio:4/5;background:var(--deep-2);margin:0;--v:.62}
+/* Sangramento até a borda direita da tela. Precisa vir DEPOIS da regra base
+   acima: como têm a mesma especificidade, a que aparece por último vence, e
+   o `margin:0` do base anularia isto se a ordem fosse invertida. */
+@media (min-width:900px){
+  .bio__shot{aspect-ratio:5/6;margin-right:calc((100vw - min(100vw, var(--wrap))) / -2 - var(--pad))}
+}
+.bio__shot img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.16) brightness(.95)}
+/* --- Grading por foto -----------------------------------------------------
+   Estúdio frio (Gabriel), tungstênio sobre mármore claro (Sávio), luz de dia
+   nublada com céu estourado (Paulo). Sem corrigir cada uma, os painéis ficam
+   com médias de luminância de 54, 117 e 110 e o conjunto não fecha. Valores
+   medidos no resultado composto (filtro + vinheta) até os três baterem na
+   mesma média. Trocou a foto, recalibre — não reaproveite estes números.
+   -------------------------------------------------------------------------- */
+.shot--g img{filter:grayscale(1) contrast(1.16) brightness(1.16)}
+.shot--s img{filter:grayscale(1) contrast(1.20) brightness(.59)}
+.shot--p img{filter:grayscale(1) contrast(1.22) brightness(.59)}
+.shot--g{--v:.62}
+.shot--s{--v:.92}
+.shot--p{--v:.96}
+.bio__shot::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 76% 60% at 50% 34%, transparent 0%, rgba(12,15,20,calc(var(--v) * .30)) 55%, rgba(12,15,20,var(--v)) 100%),
+    linear-gradient(180deg,transparent 60%,rgba(12,15,20,.5) 100%);
+}
+.bio__fb{position:absolute;inset:0;display:none;place-items:center;font-family:var(--display);font-weight:600;font-size:3.4rem;color:var(--steel)}
+.bio__shot.is-missing img{display:none}
+.bio__shot.is-missing::after{background:none}
+.bio__shot.is-missing .bio__fb{display:grid}
+
+.bio__role{display:block;color:var(--steel);margin-bottom:12px}
+/* Sobrescreve o 700 do h3: aqui o corpo é grande e aguenta o peso menor. */
+.bio__name{font-weight:600;font-size:clamp(2.4rem,7vw,4.2rem);color:var(--paper);line-height:.9;margin-bottom:20px}
+/* O número fica em branco, não em vermelho: a linha do rastro já corre
+   vermelha ao lado dele, e dois vermelhos vizinhos anulam um ao outro. O
+   tamanho é que carrega o peso aqui. */
+.bio__num{display:block;font-family:var(--display);font-weight:600;line-height:.9;font-size:clamp(2.2rem,5vw,3rem);color:var(--paper)}
+.bio__unit{display:block;margin:8px 0 20px;color:var(--steel)}
+.bio p{max-width:46ch}
+
+
+/* ---------- A operação — momento tipográfico ---------------------------- */
+.now{text-align:left}
+.now__n{
+  display:block;font-family:var(--display);font-weight:600;line-height:.82;
+  font-size:clamp(4.6rem,19vw,15rem);color:var(--paper);letter-spacing:-.02em;
+  white-space:nowrap;
+}
+/* "+R$" e "M" entram em fade; só o algarismo do meio faz a transição, de 0
+   para 1, deslizando.
+   Contagem com decimais foi testada e descartada: neste corpo "0,0" mede
+   270px contra 57px do "1", e o "M" saltava 213px no fim — largura demais
+   para estabilizar. Aqui o "1" fica no fluxo (define a largura) e o "0" sai
+   por cima, absoluto, sem empurrar nada.
+   Tudo por transição de CSS: nenhum laço de animação em JS. */
+.now__pre,.now__suf{opacity:0;transition:opacity 700ms var(--ease)}
+.now__n.is-on .now__pre,.now__n.is-on .now__suf{opacity:1}
+.now__suf{transition-delay:140ms}
+
+/* Um "0" saindo por baixo do "1" foi testado e descartado: neste corpo o "0"
+   mede 109px contra 57px do "1" e, no primeiro frame, cobria o "M". O
+   algarismo só chega — mesmo gesto (opacity + translateY) usado no resto da
+   página, então a chegada dele conversa com as outras entradas. */
+.now__val{display:inline-block}
+.now__d{
+  display:block;opacity:0;transform:translateY(46%);
+  transition:transform 820ms var(--ease),opacity 820ms var(--ease);
+}
+.now__n.is-on .now__d{opacity:1;transform:none}
+.now__u{display:block;margin-top:18px;max-width:30ch;font-size:clamp(1.1rem,2.6vw,1.5rem);line-height:1.3;color:var(--steel-lo)}
+.now__note{margin-top:34px;padding-top:22px;border-top:1px solid var(--line-d);max-width:52ch;color:var(--steel)}
+
+/* ---------- O método — trilha ------------------------------------------
+   Sem grid de cards. As 8 etapas descem ao longo do próprio rastro; cada
+   nó acende quando a linha vermelha passa por ele.
+   ------------------------------------------------------------------------ */
+.trip{margin-top:clamp(46px,6vw,74px);list-style:none;padding:0}
+.leg{position:relative;padding:0 0 clamp(30px,4vw,46px) 0}
+.leg:last-child{padding-bottom:0}
+/* nó sobre a linha do rastro */
+.leg__dot{
+  position:absolute;left:calc(var(--gut) * -1);top:.42em;
+  width:11px;height:11px;border-radius:50%;transform:translateX(-4.5px);
+  background:var(--deep);border:2px solid rgba(138,148,166,.5);
+  transition:background 300ms var(--ease),border-color 300ms var(--ease),box-shadow 300ms var(--ease);
+}
+.leg.is-on .leg__dot{background:var(--signal);border-color:var(--signal);box-shadow:0 0 0 5px rgba(199,48,14,.2)}
+/* Conteúdo da etapa sobe junto com o nó acendendo, em sequência curta:
+   número, título, descrição. No celular isso lê melhor que no desktop,
+   porque a pessoa já está descendo. */
+.leg__n,.leg__t,.leg p{
+  opacity:0;transform:translateY(12px);
+  transition:opacity 560ms var(--ease),transform 560ms var(--ease),color 400ms var(--ease);
+}
+.leg.is-on .leg__n,.leg.is-on .leg__t,.leg.is-on .leg p{opacity:1;transform:none}
+.leg.is-on .leg__t{transition-delay:70ms}
+.leg.is-on p{transition-delay:140ms}
+
+.leg__n{display:block;color:var(--steel);margin-bottom:8px}
+.leg.is-on .leg__n{color:var(--signal-lift)}
+.leg__t{
+  font-family:var(--display);font-weight:600;text-transform:uppercase;
+  font-size:clamp(1.7rem,4.6vw,2.6rem);line-height:.94;color:var(--steel);margin:0 0 8px;
+}
+.leg.is-on .leg__t{color:var(--paper)}
+.leg p{max-width:48ch;margin:0;color:var(--steel)}
+.leg.is-on p{color:var(--steel-lo)}
+
+/* ---------- Virada preto → branco --------------------------------------
+   A troca de fundo é um momento da narrativa: a palavra atravessa as duas
+   metades, clara em cima e escura embaixo. Duas cópias sobrepostas, cada
+   uma recortada em sua metade.
+   ------------------------------------------------------------------------ */
+.cross{position:relative;overflow:hidden;isolation:isolate}
+.cross__half{position:absolute;left:0;right:0;height:50%}
+.cross__half--d{top:0;background:var(--deep)}
+.cross__half--l{bottom:0;background:var(--paper)}
+.cross__word{
+  position:relative;margin:0;padding-block:clamp(52px,7vw,92px);
+  font-family:var(--display);font-weight:600;text-transform:uppercase;
+  font-size:clamp(3.2rem,13.5vw,9.5rem);line-height:.86;letter-spacing:-.01em;
+  text-align:center;
+}
+.cross__word span{display:block}
+.cross__word--l{color:var(--paper);clip-path:inset(0 0 50% 0)}
+.cross__word--d{position:absolute;inset:0;color:var(--ink);clip-path:inset(50% 0 0 0)}
+
+/* ---------- Como funciona — sem caixas ---------------------------------- */
+.how{margin-top:clamp(40px,5vw,60px);border-top:1px solid var(--line-l)}
+.how__row{
+  display:grid;grid-template-columns:1fr;gap:6px;
+  padding:20px 0;border-bottom:1px solid var(--line-l);
+}
+@media (min-width:720px){ .how__row{grid-template-columns:200px 1fr;gap:32px;align-items:baseline} }
+.how__k{color:var(--ink);font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+@media (min-width:768px){ .how__k{font-size:11px} }
+.how__v{margin:0;color:var(--ink-60);font-size:16px;line-height:1.55}
+
+/* ---------- Números grandes soltos, sem caixa --------------------------- */
+.figs{display:grid;grid-template-columns:1fr;gap:clamp(26px,3.5vw,40px);margin-top:clamp(44px,5.5vw,66px)}
+@media (min-width:640px){ .figs{grid-template-columns:repeat(3,1fr)} }
+/* Entram um a um. Só opacity e transform — as duas propriedades que o
+   navegador anima sem recalcular layout. */
+.figs > *{opacity:0;transform:translateY(12px);transition:opacity 620ms var(--ease),transform 620ms var(--ease)}
+.figs.is-in > *{opacity:1;transform:none}
+.figs.is-in > *:nth-child(2){transition-delay:90ms}
+.figs.is-in > *:nth-child(3){transition-delay:180ms}
+.fig__n{display:block;font-family:var(--display);font-weight:600;line-height:.82;font-size:clamp(4rem,11vw,7rem);color:var(--ink);letter-spacing:-.02em}
+.fig__l{display:block;margin-top:6px;color:var(--ink-60)}
+
+/* ---------- Oferta ------------------------------------------------------
+   Uma coluna de conteúdo e o preço em corpo grande ao lado. Sem comparação
+   com a fase seguinte: o que está à venda é isto aqui.
+   ------------------------------------------------------------------------ */
+.deal{
+  display:grid;grid-template-columns:1fr;gap:34px;
+  margin-top:clamp(40px,5vw,62px);padding-top:clamp(30px,3.4vw,42px);
+  border-top:1px solid var(--line-l);
+}
+@media (min-width:860px){ .deal{grid-template-columns:1fr auto;gap:64px;align-items:start} }
+.deal ul{list-style:none;margin:0;padding:0}
+.deal li{position:relative;padding:0 0 14px 22px;color:var(--ink);font-size:16.5px;line-height:1.5}
+.deal li:last-child{padding-bottom:0}
+.deal li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:1px;background:currentColor;opacity:.55}
+.deal__what{display:block;margin-bottom:10px;color:var(--ink-60)}
+.deal__price{
+  display:block;font-family:var(--display);font-weight:600;line-height:.84;
+  font-size:clamp(4.6rem,15vw,8rem);color:var(--ink);letter-spacing:-.02em;
+}
+.deal__terms{display:block;margin-top:14px;color:var(--ink-60)}
+.deal__why{
+  margin-top:clamp(30px,3.6vw,44px);padding-top:24px;
+  border-top:1px solid var(--line-l);max-width:56ch;
+  font-size:16px;line-height:1.55;color:var(--ink-60);
+}
+
+/* ---------- FAQ --------------------------------------------------------- */
+.faq{margin-top:clamp(36px,4vw,54px);max-width:74ch}
+.faq details{border-top:1px solid var(--line-l)}
+.faq details:last-of-type{border-bottom:1px solid var(--line-l)}
+.faq summary{
+  list-style:none;cursor:pointer;position:relative;padding:22px 46px 22px 0;min-height:44px;
+  font-family:var(--display);font-weight:700;text-transform:uppercase;
+  font-size:clamp(1.08rem,2.6vw,1.34rem);line-height:1.04;color:var(--ink);
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{
+  content:"+";position:absolute;right:4px;top:50%;
+  font-family:var(--display);font-weight:700;font-size:1.7rem;line-height:1;color:var(--ink-60);
+  transform:translateY(-50%);transition:transform 260ms var(--ease);
+}
+.faq details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+.faq__a{padding:0 0 24px;font-size:16px;line-height:1.6;color:var(--ink-60)}
+.faq__a p{margin:0 0 .7rem}
+.faq__a p:last-child{margin-bottom:0}
+
+/* ---------- Fechamento -------------------------------------------------- */
+.end h2{max-width:15ch}
+.end .sig{color:var(--signal);text-transform:lowercase}
+.end .lede{margin-top:28px;max-width:50ch}
+.foot{border-top:1px solid var(--line-d);margin-top:clamp(60px,7vw,96px);padding-top:32px}
+.foot__note{max-width:70ch;color:var(--steel);font-size:13px;line-height:1.6}
+/* inline-block com padding: sem isto o alvo de toque fica em 16px de altura. */
+.foot__legal{margin:2px 0 0;display:flex;flex-wrap:wrap;gap:0 26px}
+.foot__legal a{
+  display:inline-block;padding:14px 0;font-size:13px;color:var(--steel);text-decoration:none;
+}
+.foot__legal a:hover{color:var(--paper)}
+
+/* ---------- Barra fixa mobile ------------------------------------------- */
+.dock{
+  position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;gap:12px;
+  padding:10px var(--pad) calc(10px + env(safe-area-inset-bottom));
+  background:rgba(12,15,20,.95);border-top:1px solid var(--line-d);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  transform:translateY(105%);transition:transform 300ms var(--ease);
+}
+.dock.is-in{transform:none}
+.dock__info{flex:1;min-width:0;color:var(--steel)}
+.dock__p{display:block;font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:1.3rem;line-height:1;color:var(--paper);margin-top:3px}
+.dock .btn{min-height:46px;padding:0 20px;font-size:1rem;flex:none;width:auto}
+@media (min-width:768px){ .dock{display:none} }
+/* Respiração lenta, só no botão principal do celular. Nenhum outro elemento
+   da página anima em loop. */
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.022)}}
+.dock.is-in .btn{animation:breathe 3.6s ease-in-out 1.2s infinite}
+.dock .btn:hover,.dock .btn:active{animation:none}
+
+/* ---------- Cookies ----------------------------------------------------- */
+.consent{position:fixed;z-index:70;left:12px;right:12px;bottom:12px;display:none;background:var(--deep-2);border:1px solid var(--line-d);border-radius:2px;padding:17px}
+.consent.is-open{display:block}
+@media (max-width:767px){ .consent{bottom:86px} }
+@media (min-width:768px){ .consent{left:auto;right:24px;bottom:24px;max-width:390px} }
+.consent p{font-size:14px;line-height:1.5;color:var(--steel-lo);margin:0 0 13px}
+.consent a{color:var(--paper)}
+.consent__row{display:flex;gap:10px}
+.consent__btn{flex:1;min-height:44px;border-radius:2px;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--line-d);background:transparent;color:var(--steel-lo)}
+.consent__btn:hover{color:var(--paper)}
+.consent__btn--yes{background:var(--paper);border-color:var(--paper);color:var(--ink)}
+.consent__btn--yes:hover{color:var(--ink)}
+
+/* ---------- Entrada ----------------------------------------------------- */
+.rise{opacity:0;transform:translateY(18px);transition:opacity 700ms var(--ease),transform 700ms var(--ease)}
+.rise.is-in{opacity:1;transform:none}
+
+/* Movimento reduzido: sai o deslocamento, ficam opacidade e cor.
+   Zerar tudo deixava a página inerte — e no Windows a opção "efeitos de
+   animação" vem desligada em muita máquina, então isso atinge bastante gente
+   que não pediu por acessibilidade. Fade curto não é gatilho vestibular.
+   A linha do rastro continua avançando por seção, só que sem crescer: height
+   sai da lista de transições, então a altura troca na hora. */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-property:opacity,color,background-color,border-color,box-shadow !important;
+    transition-duration:300ms !important;
+    scroll-behavior:auto !important;
+  }
+  /* Só os elementos de entrada perdem o transform. O .dock fica de fora: ele
+     usa translateY para se esconder, e zerar isso o deixaria sempre visível. */
+  .rise,.leg__n,.leg__t,.leg p,.figs > *,.now__d{transform:none !important}
+  .dock.is-in .btn{animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+<div class="page">
+
+  <!-- O rastro: uma linha só, do topo ao fim. -->
+  <div class="trail" aria-hidden="true">
+    <div class="trail__base"></div>
+    <div class="trail__ink" data-ink><span class="trail__tip"></span></div>
+  </div>
+
+  <header class="top">
+    <div class="wrap">
+      <!-- PENDENTE: trocar pelo logo oficial em SVG quando existir. -->
+      <a class="brand" href="#" aria-label="RASTRO — Performance Comercial">
+        <svg width="22" height="26" viewBox="0 0 22 26" aria-hidden="true" focusable="false">
+          <rect x="0" y="0" width="3" height="26" fill="#F4F3EF"/>
+          <rect x="7" y="5" width="3" height="21" fill="#F4F3EF" opacity=".6"/>
+          <rect x="14" y="11" width="3" height="15" fill="#F4F3EF" opacity=".3"/>
+        </svg>
+        RASTRO
+      </a>
+    </div>
+  </header>
+
+<main id="conteudo">
+
+<!-- ===== 1 — TOPO ====================================================== -->
+<section class="sec hero on-deep">
+  <div class="wrap hero__inner">
+    <h1 class="rise">
+      <span class="sr-only">Seu mês bom não pode depender de sorte.</span>
+      <span class="h1-a" aria-hidden="true">Seu mês bom</span>
+      <span class="h1-b" aria-hidden="true">não pode depender de</span>
+      <span class="h1-c" aria-hidden="true"><span class="rot" data-rot><span class="rot__w">sorte.</span></span></span>
+    </h1>
+
+    <!-- O que está sendo vendido tem que ficar claro aqui, não três seções
+         abaixo: operadores reais, vendendo hoje, abrindo o processo ao vivo,
+         primeira turma, 20 pessoas. -->
+    <p class="lede rise">Gabriel, Sávio e Paulo comercializaram mais de R$17 milhões e seguem vendendo todo dia. Na Turma Fundadora eles abrem ao vivo o processo que usam — para 20 pessoas, na primeira turma da RASTRO.</p>
+
+    <div class="cta rise">
+      <a class="btn" href="#oferta" data-cta="cta_hero">
+        Quero a Turma Fundadora
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9.5M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- .col aqui também: sem o recuo, o "+" do primeiro número encosta na
+       linha do rastro. -->
+  <div class="wrap col">
+    <div class="proof rise">
+      <p class="proof__frame mono">Os números de quem vai acompanhar a sua venda</p>
+      <div class="proof__row">
+        <div><span class="proof__n">+R$17M</span><span class="proof__l">comercializados pelos três</span></div>
+        <div><span class="proof__n">+R$1M</span><span class="proof__l">por mês, agora</span></div>
+        <div><span class="proof__n">10+</span><span class="proof__l">clientes fechados por mês</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2 — FUNDADORES ================================================
+     Gabriel e Sávio são a origem do método — por isso "duas trajetórias".
+     Paulo entra depois, numa banda diferente, com o papel dele explicado.
+     ==================================================================== -->
+<section class="sec on-deep">
+  <div class="wrap col">
+    <h2 class="rise" style="max-width:20ch">Três trajetórias. <span class="dim">Uma metodologia.</span></h2>
+
+    <div style="margin-top:clamp(48px,6vw,84px)">
+      <article class="bio rise">
+        <div class="bio__text">
+          <span class="bio__role mono">Founder &amp; CEO</span>
+          <h3 class="bio__name">Gabriel</h3>
+          <span class="bio__num">+R$6M</span>
+          <span class="bio__unit mono">Comercializados</span>
+          <p>Ultrapassou R$6 milhões comercializados aos 18 anos. Segue à frente da operação: cada técnica que ele ensina, ele usou esta semana.</p>
+        </div>
+        <figure class="bio__shot shot--g">
+          <img src="fotos/gabriel.webp" width="640" height="800" alt="Gabriel, Founder e CEO da RASTRO" loading="lazy" decoding="async">
+          <span class="bio__fb" aria-hidden="true">G</span>
+        </figure>
+      </article>
+
+      <article class="bio rise">
+        <div class="bio__text">
+          <span class="bio__role mono">Co-Founder &amp; COO</span>
+          <h3 class="bio__name">Sávio</h3>
+          <span class="bio__num">+R$4M</span>
+          <span class="bio__unit mono">Comercializados</span>
+          <p>Trouxe para a RASTRO a parte de estrutura: como transformar venda que deu certo em processo que outra pessoa consegue repetir.</p>
+        </div>
+        <figure class="bio__shot shot--s">
+          <img src="fotos/savio.webp" width="640" height="800" alt="Sávio, Co-Founder e COO da RASTRO" loading="lazy" decoding="async">
+          <span class="bio__fb" aria-hidden="true">S</span>
+        </figure>
+      </article>
+
+      <article class="bio rise">
+        <div class="bio__text">
+          <span class="bio__role mono">Co-Founder &amp; Head of Sales</span>
+          <h3 class="bio__name">Paulo</h3>
+          <span class="bio__num">+R$7M</span>
+          <span class="bio__unit mono">Comercializados</span>
+          <p>Mais de R$7 milhões comercializados. Aos 29 anos, responde pela operação de vendas da RASTRO: é quem roda o processo todo dia e cobra o resultado dele — e quem vai acompanhar a sua venda durante a turma.</p>
+        </div>
+        <figure class="bio__shot shot--p">
+          <img src="fotos/paulo.webp" width="640" height="800" alt="Paulo, Co-Founder e Head of Sales da RASTRO" loading="lazy" decoding="async">
+          <span class="bio__fb" aria-hidden="true">P</span>
+        </figure>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3 — A OPERAÇÃO ================================================
+     O número mensal é a prova mais forte que existe hoje: mostra que a
+     operação está rodando agora, não que rodou um dia.
+     ==================================================================== -->
+<section class="sec on-deep">
+  <div class="wrap col now">
+    <p class="label rise">A operação hoje</p>
+    <span class="now__n rise" data-count>
+      <span class="now__pre">+R$</span><span class="now__val"><span class="now__d">1</span></span><span class="now__suf">M</span>
+    </span>
+    <span class="now__u rise">comercializados por mês através das operações atuais.</span>
+    <p class="now__note rise">Não é um número de um ano bom que passou. É o que a operação fecha enquanto esta página está no ar — e é exatamente esse processo que abre na Turma Fundadora.</p>
+
+    <!-- ====================================================================
+         PROVA REAL DA OPERAÇÃO — ESPAÇO PRONTO, FALTAM OS ARQUIVOS
+
+         Aqui entram os elementos que tiram a página da palavra dos fundadores:
+           - print do CRM / pipeline comercial (dados de cliente cobertos)
+           - proposta assinada (valores visíveis, nome do cliente coberto)
+           - agenda da semana com reuniões marcadas
+           - dashboard de comissão ou de fechamento
+           - vídeo curto, mudo, em autoplay+loop, dos fundadores trabalhando
+
+         Sugestão de marcação quando os arquivos existirem (grade de 2 a 4
+         itens, mesma vinheta das fotos, legenda em mono explicando o que é):
+
+         <div class="ops">
+           <figure class="ops__item">
+             <img src="operacao/pipeline.jpg" width="900" height="600"
+                  alt="Pipeline comercial da operação, com nomes de clientes ocultos"
+                  loading="lazy" decoding="async">
+             <figcaption class="mono">Pipeline — semana de [DATA]</figcaption>
+           </figure>
+           ...
+         </div>
+
+         NÃO gere estes materiais nem use imagem de banco: prova inventada é
+         pior que ausência de prova. Enquanto não houver arquivo real, esta
+         seção fica só com o número, que é verdadeiro e comprovável.
+         ==================================================================== -->
+  </div>
+</section>
+
+<!-- ===== 4 — O MÉTODO ==================================================
+     As 8 etapas têm ordem, então viram percurso, não grade de cards. Cada
+     nó acende quando a linha vermelha do rastro passa por ele.
+     ==================================================================== -->
+<section class="sec on-deep" id="metodo">
+  <div class="wrap col">
+    <h2 class="rise" style="max-width:18ch">Oito etapas. <span class="dim">Nenhuma opcional.</span></h2>
+    <p class="lede rise" style="margin-top:24px;max-width:52ch">A maioria dos vendedores é boa em duas ou três dessas etapas e perde dinheiro nas outras cinco.</p>
+
+    <ol class="trip" data-trip>
+      <li class="leg"><span class="leg__dot" aria-hidden="true"></span><span class="leg__n mono">Etapa 01</span><h3 class="leg__t">Prospecção</h3><p>Encher a agenda sem depender de indicação e sorte.</p></li>
+      <li class="leg"><span class="leg__dot" aria-hidden="true"></span><span class="leg__n mono">Etapa 02</span><h3 class="leg__t">Abordagem</h3><p>A primeira frase que faz o lead responder em vez de ignorar.</p></li>
+      <li class="leg"><span class="leg__dot" aria-hidden="true"></span><span class="leg__n mono">Etapa 03</span><h3 class="leg__t">Diagnóstico</h3><p>Perguntar de um jeito que o próprio cliente enxerga o problema.</p></li>
+      <li class="leg"><span class="leg__dot" aria-hidden="true"></span><span class="leg__n mono">Etapa 04</span><h3 class="leg__t">Negociação</h3><p>Conduzir o preço sem entregar desconto por medo.</p></li>
+      <li class="leg"><span class="leg__dot" aria-hidden="true"></span><span class="leg__n mono">Etapa 05</span><h3 class="leg__t">Objeções</h3><p>Resposta pronta para “tá caro”, “vou pensar” e “vou ver com meu sócio”.</p></li>
+      <li class="leg"><span class="leg__dot" aria-hidden="true"></span><span class="leg__n mono">Etapa 06</span><h3 class="leg__t">Follow-up</h3><p>Voltar sem parecer insistente — e sem sumir.</p></li>
+      <li class="leg"><span class="leg__dot" aria-hidden="true"></span><span class="leg__n mono">Etapa 07</span><h3 class="leg__t">Fechamento</h3><p>Pedir a venda na hora certa, com a palavra certa.</p></li>
+      <li class="leg"><span class="leg__dot" aria-hidden="true"></span><span class="leg__n mono">Etapa 08</span><h3 class="leg__t">Indicação</h3><p>Transformar cliente fechado em dois novos clientes.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===== 5 — A VIRADA ==================================================
+     A troca de preto para branco é uma decisão de direção, não uma emenda:
+     a palavra atravessa as duas metades.
+     ==================================================================== -->
+<section class="cross" aria-hidden="true">
+  <div class="cross__half cross__half--d"></div>
+  <div class="cross__half cross__half--l"></div>
+  <p class="cross__word cross__word--l"><span>Turma</span><span>Fundadora</span></p>
+  <p class="cross__word cross__word--d"><span>Turma</span><span>Fundadora</span></p>
+</section>
+<h2 class="sr-only">Turma Fundadora</h2>
+
+<!-- ===== 6 — COMO FUNCIONA ============================================= -->
+<section class="sec on-paper">
+  <div class="wrap col">
+    <h2 class="rise" style="max-width:16ch">Como funciona <span class="dim">na prática.</span></h2>
+
+    <div class="figs" data-figs>
+      <div><span class="fig__n">20</span><span class="fig__l mono">Pessoas</span></div>
+      <div><span class="fig__n">08</span><span class="fig__l mono">Pilares</span></div>
+      <div><span class="fig__n">01</span><span class="fig__l mono">Turma Fundadora</span></div>
+    </div>
+
+    <!-- ====================================================================
+         FALTAM AS INFORMAÇÕES OPERACIONAIS DA TURMA
+
+         Só entram aqui linhas que já estão definidas e confirmadas. Assim que
+         estas forem decididas, adicione uma .how__row para cada:
+
+           <div class="how__row"><span class="how__k">Início</span>
+             <p class="how__v">[DATA]</p></div>
+           Encontros   — [N] encontros, [FREQUÊNCIA]
+           Dia e hora  — [DIA], [HORÁRIO], duração de [TEMPO]
+           Onde        — [ZOOM / MEET / OUTRO]
+           Gravação    — fica gravado? por quanto tempo fica disponível?
+
+         Enquanto não estiverem definidas, a página não promete o que não
+         sabe. Estas são as perguntas que mais travam compra — resolva antes
+         de subir tráfego pago.
+         ==================================================================== -->
+    <div class="how rise">
+      <div class="how__row"><span class="how__k">Formato</span><p class="how__v">Encontros ao vivo com os três fundadores, cobrindo os 8 pilares do método. Não é aula gravada para assistir sozinho.</p></div>
+      <div class="how__row"><span class="how__k">Tamanho</span><p class="how__v">20 pessoas. Pequena de propósito: dá pra olhar a venda de cada um e corrigir a rota.</p></div>
+      <div class="how__row"><span class="how__k">Acompanhamento</span><p class="how__v">Grupo com contato direto com Gabriel, Sávio e Paulo durante toda a turma.</p></div>
+      <div class="how__row"><span class="how__k">Materiais</span><p class="how__v">Scripts de abordagem, negociação e follow-up, mais a matriz de objeções pronta pra usar.</p></div>
+      <div class="how__row"><span class="how__k">Aplicação</span><p class="how__v">Você traz sua venda travada e a gente destrava junto. É pra usar dentro da venda que você já faz.</p></div>
+      <div class="how__row"><span class="how__k">Acesso</span><p class="how__v">Pela Hotmart. Liberado no e-mail cadastrado assim que a compra é aprovada.</p></div>
+      <div class="how__row"><span class="how__k">Garantia</span><p class="how__v">7 dias. Pede o reembolso pela Hotmart e devolvemos 100%, sem burocracia.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7 — OFERTA ====================================================
+     Sem pricing card: a própria história da turma explica o preço.
+     ==================================================================== -->
+<section class="sec on-paper" id="oferta">
+  <div class="wrap col">
+    <h2 class="rise" style="max-width:18ch">O menor preço <span class="dim">que a RASTRO vai ter.</span></h2>
+
+    <!-- A coluna "Depois" saiu: falar do preço futuro tirava atenção da oferta
+         que está em jogo agora. A escassez continua verdadeira e vive na linha
+         de fecho, sem virar tabela comparativa. -->
+    <div class="deal rise">
+      <div class="deal__list">
+        <ul>
+          <li>Ao vivo, com os três fundadores dentro</li>
+          <li>20 pessoas, contato próximo</li>
+          <li>Sua venda real revisada durante a turma</li>
+          <li>Scripts e matriz de objeções inclusos</li>
+          <li>Grupo de acompanhamento direto</li>
+          <li>Garantia de 7 dias, reembolso integral</li>
+        </ul>
+      </div>
+
+      <div class="deal__buy">
+        <span class="deal__what mono">Turma Fundadora — 20 vagas</span>
+        <span class="deal__price">R$297</span>
+        <span class="deal__terms mono">Pagamento único — Cartão, Pix ou boleto</span>
+        <div class="cta">
+          <a class="btn" href="#oferta" data-cta="cta_oferta">
+            Quero fazer parte
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9.5M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <!-- Único micro-texto que sobrou na página. Fica porque é sinal de
+               confiança na hora da compra, não repetição de padrão. -->
+          <p class="mono">Compra segura via Hotmart</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="deal__why rise">Você paga menos agora porque entra antes de existir prova de aluno — e porque o acompanhamento de perto só cabe em 20 pessoas uma vez.</p>
+  </div>
+</section>
+
+<!-- ===== 8 — OBJEÇÕES ================================================== -->
+<section class="sec on-paper on-paper-2">
+  <div class="wrap col">
+    <h2 class="rise" style="max-width:16ch">O que passa <span class="dim">na sua cabeça agora.</span></h2>
+
+    <div class="faq rise">
+      <details>
+        <summary>“Já tentei curso de vendas e não mudou nada.”</summary>
+        <div class="faq__a">
+          <p>Curso gravado você assiste e esquece. Aqui são 20 pessoas, ao vivo, com a gente olhando a sua venda travada.</p>
+          <p>A diferença não está no conteúdo — está em ter alguém corrigindo você enquanto você aplica.</p>
+        </div>
+      </details>
+      <details>
+        <summary>“Vocês são muito novos.”</summary>
+        <div class="faq__a">
+          <p>Somos. E é exatamente por isso que os números são de agora, e não de dez anos atrás.</p>
+          <p>O que a gente ensina está sendo usado esta semana, no mercado como ele é hoje.</p>
+        </div>
+      </details>
+      <details>
+        <summary>“O meu produto é diferente.”</summary>
+        <div class="faq__a">
+          <p>Prospecção, diagnóstico, objeção e fechamento existem em qualquer venda.</p>
+          <p>O que muda é o roteiro — e roteiro a gente adapta junto com você no acompanhamento.</p>
+        </div>
+      </details>
+      <details>
+        <summary>“R$297 tá apertado esse mês.”</summary>
+        <div class="faq__a">
+          <p>Justo. Só que o preço está nesse patamar porque é a turma fundadora.</p>
+          <p>Na próxima, com o produto gravado e estruturado, ele sobe. Esse é o momento mais barato de entrar.</p>
+        </div>
+      </details>
+      <details>
+        <summary>“Não tenho tempo.”</summary>
+        <div class="faq__a">
+          <p>A metodologia é pra aplicar dentro da venda que você já faz, não além dela.</p>
+          <p>Se você já está prospectando, você já tem o tempo — está usando ele errado.</p>
+        </div>
+      </details>
+      <details>
+        <summary>“Nunca vendi na vida. Serve pra mim?”</summary>
+        <div class="faq__a">
+          <p>Serve, e talvez seja melhor ainda: você aprende o processo certo antes de criar vício.</p>
+          <p>Só precisa ter (ou estar prestes a ter) algo pra vender.</p>
+        </div>
+      </details>
+      <details>
+        <summary>“E se eu não gostar?”</summary>
+        <div class="faq__a">
+          <p>7 dias de garantia. Pede o reembolso pela Hotmart e devolvemos 100%.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 9 — FECHAMENTO ================================================ -->
+<section class="sec end on-deep">
+  <div class="wrap col">
+    <h2 class="rise">Todo resultado deixa um <span class="sig">rastro.</span></h2>
+    <p class="lede rise">Daqui a seis meses você vai estar vendendo de um jeito ou de outro. Ou no improviso, torcendo pro mês fechar — ou com um caminho que você sabe repetir.</p>
+
+    <div class="cta rise">
+      <a class="btn" href="#oferta" data-cta="cta_final">
+        Garantir minha vaga
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9.5M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <!-- PENDENTE: CNPJ e as páginas de política e termos precisam existir.
+         A linha em mono caixa alta saiu (poluía), mas os dois links não podem
+         sumir: a página carrega Pixel e a LGPD exige política acessível. Ficam
+         aqui, discretos, dentro do aviso legal. -->
+    <footer class="foot">
+      <p class="foot__note">Os resultados citados são das trajetórias dos três fundadores e não representam garantia de resultado individual.</p>
+      <p class="foot__legal"><a href="/politica-de-privacidade">Política de Privacidade</a><a href="/termos-de-uso">Termos de Uso</a></p>
+    </footer>
+  </div>
+</section>
+
+</main>
+</div><!-- /.page -->
+
+<div class="dock" data-dock>
+  <div class="dock__info">
+    <span class="mono">Turma Fundadora</span>
+    <span class="dock__p">R$297</span>
+  </div>
+  <a class="btn" href="#oferta" data-cta="cta_dock">Vaga</a>
+</div>
+
+<div class="consent" data-consent role="dialog" aria-live="polite" aria-label="Aviso de cookies">
+  <p>A gente usa cookies para medir o desempenho desta página. Você escolhe. Detalhes na <a href="/politica-de-privacidade">Política de Privacidade</a>.</p>
+  <div class="consent__row">
+    <button class="consent__btn" type="button" data-deny>Recusar</button>
+    <button class="consent__btn consent__btn--yes" type="button" data-allow>Aceitar</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ======================================================================
+     CONFIGURAÇÃO — único bloco a editar antes do deploy.
+     ====================================================================== */
+  var CONFIG = {
+    // PENDENTE — URL do checkout da Hotmart, sem query string.
+    // Vazia: os CTAs rolam até a oferta em vez de virar link morto.
+    checkoutUrl: '',
+    metaPixelId: '',
+    ga4Id: '',
+    utm: { source:'instagram', medium:'bio', campaign:'turma_fundadora' }
+  };
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasIO  = 'IntersectionObserver' in window;
+
+  /* ---------- Retratos: monograma se a foto faltar --------------------- */
+  Array.prototype.forEach.call(document.querySelectorAll('.bio__shot img'), function(img){
+    function fail(){ img.parentNode.classList.add('is-missing'); }
+    img.addEventListener('error', fail);
+    if (img.complete && img.naturalWidth === 0) fail();
+  });
+
+  /* ---------- CTAs ------------------------------------------------------ */
+  var ctas = Array.prototype.slice.call(document.querySelectorAll('[data-cta]'));
+
+  if (CONFIG.checkoutUrl) {
+    ctas.forEach(function(a){
+      var u = CONFIG.utm;
+      a.setAttribute('href', CONFIG.checkoutUrl
+        + (CONFIG.checkoutUrl.indexOf('?') > -1 ? '&' : '?')
+        + 'utm_source='   + encodeURIComponent(u.source)
+        + '&utm_medium='  + encodeURIComponent(u.medium)
+        + '&utm_campaign='+ encodeURIComponent(u.campaign)
+        + '&utm_content=' + encodeURIComponent(a.getAttribute('data-cta')));
+      a.setAttribute('rel', 'noopener');
+    });
+  } else if (window.console && console.warn) {
+    console.warn('[RASTRO] CONFIG.checkoutUrl vazio: CTAs rolam para #oferta. Preencha antes de publicar.');
+  }
+
+  /* ---------- Tracking (no-op sem os IDs) ------------------------------- */
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ window.dataLayer.push(arguments); }
+  function track(name, params){
+    if (typeof window.fbq === 'function' && name === 'InitiateCheckout') window.fbq('track','InitiateCheckout',params||{});
+    if (typeof window.gtag === 'function') window.gtag('event', name, params||{});
+  }
+  ctas.forEach(function(a){
+    a.addEventListener('click', function(){
+      track('InitiateCheckout', { value:297, currency:'BRL', content_name:'RASTRO Turma Fundadora' });
+      track('click_cta', { utm_content:a.getAttribute('data-cta'), value:297, currency:'BRL' });
+    });
+  });
+
+  /* Scroll depth por sentinelas observadas, não por listener de scroll:
+     nada roda a cada frame e não há leitura de layout durante a rolagem. */
+  function setupDepth(){
+    var host = document.querySelector('.page');
+    if (!host || !hasIO) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        track('scroll_depth', { percent_scrolled: +en.target.getAttribute('data-depth') });
+        io.unobserve(en.target);
+      });
+    });
+    [25,50,75,99].forEach(function(pct){
+      var s = document.createElement('span');
+      s.setAttribute('data-depth', pct === 99 ? 100 : pct);
+      s.setAttribute('aria-hidden','true');
+      s.style.cssText = 'position:absolute;left:0;width:1px;height:1px;pointer-events:none;top:' + pct + '%';
+      host.appendChild(s);
+      io.observe(s);
+    });
+  }
+
+  /* ---------- Consentimento -------------------------------------------- */
+  var KEY = 'rastro_consent_v1';
+  var bar = document.querySelector('[data-consent]');
+
+  function loadTrackers(){
+    if (CONFIG.metaPixelId && !window.fbq) {
+      (function(f,b,e,v,n,t,s){
+        if(f.fbq)return; n=f.fbq=function(){ n.callMethod ? n.callMethod.apply(n,arguments) : n.queue.push(arguments) };
+        if(!f._fbq)f._fbq=n; n.push=n; n.loaded=!0; n.version='2.0'; n.queue=[];
+        t=b.createElement(e); t.async=!0; t.src=v; s=b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t,s);
+      })(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      window.fbq('init', CONFIG.metaPixelId); window.fbq('track','PageView');
+    }
+    if (CONFIG.ga4Id && !window.gtag) {
+      var g = document.createElement('script');
+      g.async = true; g.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(CONFIG.ga4Id);
+      document.head.appendChild(g);
+      window.gtag = gtag; gtag('js', new Date()); gtag('config', CONFIG.ga4Id);
+    }
+  }
+  function setConsent(v){
+    try { localStorage.setItem(KEY, v); } catch(e){}
+    if (bar) bar.classList.remove('is-open');
+    if (v === 'granted') loadTrackers();
+  }
+  var stored = null;
+  try { stored = localStorage.getItem(KEY); } catch(e){}
+  if (stored === 'granted') loadTrackers();
+  else if (stored !== 'denied' && bar) bar.classList.add('is-open');
+  if (bar) {
+    bar.querySelector('[data-allow]').addEventListener('click', function(){ setConsent('granted'); });
+    bar.querySelector('[data-deny]').addEventListener('click',  function(){ setConsent('denied');  });
+  }
+
+  /* ---------- Entrada por scroll --------------------------------------- */
+  var risers = document.querySelectorAll('.rise');
+
+  /* Marcado pelo primeiro callback de qualquer observador. Serve para saber se
+     o IntersectionObserver está mesmo entregando — ver a rede de segurança
+     mais abaixo. */
+  var ioAlive = false;
+
+  /* Rede de segurança: nada que dependa de observador pode ficar invisível se
+     o observador não entregar. Cobre todos os blocos animados, não só .rise. */
+  function showAll(){
+    Array.prototype.forEach.call(risers, function(el){ el.classList.add('is-in'); });
+    Array.prototype.forEach.call(document.querySelectorAll('.leg'), function(el){ el.classList.add('is-on'); });
+    var figs = document.querySelector('[data-figs]');   if (figs)  figs.classList.add('is-in');
+    var count = document.querySelector('[data-count]'); if (count) count.classList.add('is-on');
+  }
+
+  if (!hasIO) {
+    showAll();
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      ioAlive = true;
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-in');
+        io.unobserve(en.target);
+      });
+      catchUp();
+    }, { rootMargin:'0px 0px -10% 0px', threshold:.12 });
+    Array.prototype.forEach.call(risers, function(el){ io.observe(el); });
+
+    /* Rede de segurança: revela tudo se o observador não deu sinal de vida.
+       Duas condições, e as duas importam:
+       1) sem `if (!ioAlive)` ela disparava sempre e acendia os 8 nós, os
+          números e o +R$1M antes da pessoa chegar neles;
+       2) o cronômetro só começa com a aba visível. Em aba de segundo plano o
+          Chrome não roda os passos de renderização, o IntersectionObserver
+          não dispara, e a rede queimaria a página inteira antes de alguém
+          olhar — que é justamente o caso de quem abre o link e troca de app. */
+    function armarRede(){
+      window.setTimeout(function(){ if (!ioAlive) showAll(); }, 3500);
+    }
+    if (document.visibilityState === 'visible') {
+      armarRede();
+    } else {
+      document.addEventListener('visibilitychange', function aoVoltar(){
+        if (document.visibilityState !== 'visible') return;
+        document.removeEventListener('visibilitychange', aoVoltar);
+        armarRede();
+      });
+    }
+  }
+
+  /* ---------- O RASTRO --------------------------------------------------
+     A linha avança em degraus, um por marco (cada seção e cada etapa do
+     método). Quem anima é a transição de CSS — o JS só decide, na entrada do
+     marco, até onde a linha deve ir. Zero cálculo por frame.
+     --------------------------------------------------------------------- */
+  var page  = document.querySelector('.page');
+  var trail = document.querySelector('.trail');
+  var legs  = Array.prototype.slice.call(document.querySelectorAll('.leg'));
+  var reached = 0;
+
+  /* Medidas tiradas UMA vez (e a cada resize), não a cada frame. É o que
+     torna o acompanhamento contínuo barato: no frame só sobra aritmética,
+     nenhuma leitura de layout — que é o que forçava reflow na versão antiga. */
+  var M = { topo:0, altura:1, etapas:[] };
+  var etapaAcesa = [];
+
+  function medir(){
+    if (!page) return;
+    M.topo = page.getBoundingClientRect().top + window.pageYOffset;
+    M.altura = page.offsetHeight || 1;
+    M.etapas = legs.map(function(el){
+      return el.getBoundingClientRect().top + window.pageYOffset - M.topo;
+    });
+  }
+
+  /* A ponta do rastro fica a 62% da altura da tela: à frente do que a pessoa
+     acabou de ler, sem colar no rodapé da janela. */
+  var MIRA = 0.62;
+
+  function pintar(){
+    if (!page || !trail) return;
+    var vh = window.innerHeight;
+    var ponta = (window.pageYOffset - M.topo) + vh * MIRA;   // px dentro da página
+    var p = ponta / M.altura;
+    // No fim da página a linha fecha: sem isto sobrariam ~4% em cinza.
+    if (window.pageYOffset + vh >= M.altura + M.topo - 8) p = 1;
+    p = p < 0 ? 0 : (p > 1 ? 1 : p);
+
+    document.documentElement.style.setProperty('--p', p.toFixed(4));
+    if (p > 0) trail.classList.add('is-live');
+
+    // Os nós acendem quando a ponta passa por eles — só comparação numérica.
+    for (var i = 0; i < legs.length; i++) {
+      if (etapaAcesa[i]) continue;
+      if (ponta >= M.etapas[i]) { etapaAcesa[i] = true; legs[i].classList.add('is-on'); }
+    }
+  }
+
+  /* Recupera blocos .rise que o observador não viu passar num salto de scroll
+     (rolagem rápida, tecla End, clique num CTA que pula para a oferta): o
+     elemento vai de "abaixo da tela" para "acima" sem nunca intersectar, e
+     ficaria em opacity:0 para sempre. As etapas não precisam disto — o
+     acompanhamento contínuo já as pega. */
+  function catchUp(){
+    var linha = window.innerHeight * 0.66;
+    Array.prototype.forEach.call(risers, function(el){
+      if (!el.classList.contains('is-in') && el.getBoundingClientRect().top < linha) {
+        el.classList.add('is-in');
+      }
+    });
+  }
+
+  /* ---------- Palavra giratória ----------------------------------------- */
+  var rot = document.querySelector('[data-rot]');
+  if (rot && !reduce) {
+    var words = ['sorte.','humor.','carisma.','milagre.'];
+    var i = 0, busy = false;
+
+    // Trava a largura na palavra mais longa: sem isso a headline pula.
+    (function(){
+      var probe = document.createElement('span');
+      probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap';
+      rot.appendChild(probe);
+      var max = 0;
+      words.forEach(function(w){ probe.textContent = w; max = Math.max(max, probe.offsetWidth); });
+      probe.remove();
+      rot.style.minWidth = Math.ceil(max) + 'px';
+    })();
+
+    window.setInterval(function(){
+      if (busy || document.hidden) return;
+      busy = true;
+      var cur  = rot.querySelector('.rot__w');
+      var next = document.createElement('span');
+      next.className = 'rot__w is-next';
+      next.textContent = words[(i + 1) % words.length];
+      rot.appendChild(next);
+      void next.offsetWidth;                 // reflow: a transição parte do estado inicial
+      cur.classList.add('is-out');
+      next.classList.add('is-in');
+      window.setTimeout(function(){
+        cur.remove();
+        next.classList.remove('is-next','is-in');
+        i = (i + 1) % words.length;
+        busy = false;
+      }, 560);
+    }, 2400);
+  }
+
+  /* ---------- Chegada do +R$1M ------------------------------------------
+     Só liga a classe; quem anima é o CSS.
+     --------------------------------------------------------------------- */
+  function setupCount(){
+    var box = document.querySelector('[data-count]');
+    if (!box) return;
+    if (!hasIO) { box.classList.add('is-on'); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-on');
+        io.unobserve(en.target);
+      });
+    }, { threshold:.5 });
+    io.observe(box);
+  }
+
+  /* ---------- Números grandes e barra fixa -------------------------------- */
+  function setupFigs(){
+    var figs = document.querySelector('[data-figs]');
+    if (!figs) return;
+    if (!hasIO) { figs.classList.add('is-in'); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-in');
+        io.unobserve(en.target);
+      });
+    }, { threshold:.3 });
+    io.observe(figs);
+  }
+
+  function setupDock(){
+    var dock = document.querySelector('[data-dock]');
+    var hero = document.querySelector('.hero');
+    if (!dock || !hero) return;
+    if (!hasIO) { dock.classList.add('is-in'); return; }
+    // Observa o hero: fora da tela, a barra entra. Sem listener de scroll.
+    new IntersectionObserver(function(entries){
+      dock.classList.toggle('is-in', !entries[0].isIntersecting);
+    }, { threshold:0 }).observe(hero);
+  }
+
+  /* ---------- Partida --------------------------------------------------- */
+  /* ---------- Loop de scroll --------------------------------------------
+     Um único listener passivo, estrangulado por frame. O trabalho por frame é
+     só aritmética — as medidas ficam em cache. O rastro continua acompanhando
+     mesmo com movimento reduzido: é indicador de leitura preso ao gesto da
+     própria pessoa, não movimento autônomo.
+     --------------------------------------------------------------------- */
+  var pendente = false;
+  var agendar = window.requestAnimationFrame
+    ? function(fn){ window.requestAnimationFrame(fn); }
+    : function(fn){ window.setTimeout(fn, 60); };   // reserva: a trava nunca prende
+
+  function aoRolar(){
+    if (pendente) return;
+    pendente = true;
+    agendar(function(){ pendente = false; pintar(); });
+  }
+
+  var reMedir;
+  function aoRedimensionar(){
+    window.clearTimeout(reMedir);
+    reMedir = window.setTimeout(function(){ medir(); pintar(); }, 150);
+  }
+
+  medir();
+  pintar();
+  window.addEventListener('scroll', aoRolar, { passive:true });
+  window.addEventListener('resize', aoRedimensionar, { passive:true });
+  // As fontes mudam a altura da página ao trocar: remede quando chegarem.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function(){ medir(); pintar(); });
+  }
+
+  setupCount();
+  setupFigs();
+  setupDock();
+  setupDepth();
+
+})();
+</script>
+
+</body>
+</html>
