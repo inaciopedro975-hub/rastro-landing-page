@@ -90,7 +90,8 @@ body{
   font-family:var(--body);font-size:16.5px;line-height:1.6;
   overflow-x:hidden;overflow-x:clip;-webkit-font-smoothing:antialiased;
 }
-@media (max-width:767px){ body{padding-bottom:74px} }
+/* Acompanha o breakpoint da barra fixa, senão ela cobre o rodapé entre 768 e 899px. */
+@media (max-width:899px){ body{padding-bottom:74px} }
 
 img{max-width:100%;height:auto;display:block}
 a{color:inherit}
@@ -99,7 +100,9 @@ h1,h2,h3{
   font-family:var(--display);font-weight:600;text-transform:uppercase;
   line-height:.94;margin:0;
 }
-h1{font-size:clamp(2.6rem,9.2vw,6.4rem)}
+/* Menor que antes: a headline nova tem três linhas cheias e precisa caber com
+   a linha de apoio, o parágrafo e os dois botões na primeira tela do celular. */
+h1{font-size:clamp(2.15rem,7.4vw,5.2rem)}
 h2{font-size:clamp(2rem,5.6vw,3.6rem);text-wrap:balance}
 h3{font-size:1.28rem;font-weight:700}
 p{margin:0 0 1.05rem}
@@ -141,7 +144,9 @@ p:last-child{margin-bottom:0}
 .col{padding-left:calc(var(--pad) + var(--gut))}
 /* Mínimo baixo de propósito: no celular a página é longa e 76px de respiro em
    cima e embaixo somavam 152px de vazio entre cada seção. */
-.sec{position:relative;padding-block:clamp(54px,9vw,124px)}
+/* ~30% menor que antes em todas as pontas: nenhuma seção deve ter uma tela
+   inteira de vazio acima do próprio conteúdo. */
+.sec{position:relative;padding-block:clamp(40px,6.2vw,86px)}
 .sec > *{position:relative;z-index:1}
 .on-deep{background:var(--deep);color:var(--steel-lo)}
 .on-deep h1,.on-deep h2,.on-deep h3{color:var(--paper)}
@@ -197,10 +202,17 @@ p:last-child{margin-bottom:0}
 @media (max-width:479px){ .btn{width:100%} }
 .cta{margin-top:38px}
 .cta .mono{margin-top:16px;color:var(--steel)}
+/* Botão secundário: fantasma, para não competir com o vermelho do principal. */
+.btn--fantasma{background:transparent;border:1px solid var(--line-d);color:var(--paper)}
+.btn--fantasma:hover{background:rgba(255,255,255,.06);border-color:var(--steel);transform:translateY(-1px)}
+.cta--dupla{display:flex;flex-wrap:wrap;gap:12px}
+@media (max-width:479px){ .cta--dupla{flex-direction:column} }
 .on-paper .cta .mono{color:var(--ink-60)}
 
 /* ---------- Hero -------------------------------------------------------- */
 .top{padding-block:26px 0;position:relative;z-index:5;background:transparent}
+/* A assinatura da marca precisa existir na primeira tela, não só no <title>. */
+.brand__sig{display:block;margin-top:9px;color:var(--steel)}
 .brand{
   display:inline-flex;align-items:center;gap:11px;text-decoration:none;
   font-family:var(--display);font-weight:700;text-transform:uppercase;
@@ -215,10 +227,20 @@ p:last-child{margin-bottom:0}
 }
 .hero__inner{text-align:center;display:flex;flex-direction:column;align-items:center}
 
-.h1-a,.h1-b,.h1-c{display:block;line-height:.9}
-.h1-a{font-size:clamp(1.6rem,4.6vw,3.2rem);color:var(--steel-lo)}
-.h1-b{font-size:clamp(2.1rem,6.2vw,4.4rem);margin-top:.06em}
-.h1-c{font-size:clamp(3.4rem,13.4vw,9.2rem);margin-top:.04em;letter-spacing:-.01em}
+/* Linha de apoio acima do H1: recebeu a frase que antes era a headline. */
+.kicker{
+  font-family:var(--display);font-weight:700;text-transform:uppercase;
+  font-size:clamp(.95rem,2.2vw,1.25rem);line-height:1.1;letter-spacing:.02em;
+  color:var(--steel);margin:0 0 clamp(16px,2.2vw,24px);
+}
+/* --signal-lift, não --signal: aqui a palavra virou texto pequeno (15px) e o
+   vermelho puro dá 3.53:1 sobre o escuro, reprovando em AA. O tom levantado
+   dá 4.57:1. Na headline antiga isso não importava porque era texto grande. */
+.kicker .rot{color:var(--signal-lift);height:1.05em}
+
+/* Três linhas do mesmo corpo: a frase do cliente é uma sentença só e quebrar
+   em tamanhos diferentes descaracterizava a leitura dela. */
+.h1-a,.h1-b,.h1-c{display:block;line-height:.94}
 /* text-align:center é obrigatório aqui: o slot tem a largura da palavra mais
    longa ("carisma."), então sem isso as curtas encostam na esquerda e a
    headline parece desalinhada a cada troca. */
@@ -239,7 +261,14 @@ p:last-child{margin-bottom:0}
    viravam três células paralelas de dashboard. Os rótulos saem do mono caixa
    alta: quatro linhas em caixa alta no mesmo bloco pesam demais, e a frase de
    cima já é a voz do mono aqui. Fios de 1px amarram os três num bloco só. */
-.proof{margin-top:clamp(46px,6vw,82px);padding-top:26px;border-top:1px solid var(--line-d)}
+/* Fio metálico de 1px com fade nas pontas, no lugar do cinza chapado.
+   border-image não aceita gradiente com fade limpo, então é um ::before. */
+.proof{margin-top:clamp(32px,4.2vw,58px);padding-top:26px;position:relative}
+.proof::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,#8B8E96 12%,#E3E5EA 45%,#9A9DA5 72%,#D6D9DF 88%,transparent);
+  opacity:.75;
+}
 .proof__frame{margin:0 0 clamp(22px,2.6vw,34px);color:var(--steel)}
 /* No celular vira uma pauta: número à esquerda, rótulo à direita, fio de 1px
    entre as linhas. Empilhado em bloco (número enorme, rótulo, repete) ocupava
@@ -256,9 +285,18 @@ p:last-child{margin-bottom:0}
   .proof__row > *:first-child{padding-top:0}
   .proof__row > * + *{padding-left:clamp(24px,3vw,46px);border-left:1px solid var(--line-d)}
 }
+/* Metálico só aqui e nos fios das seções escuras. Em texto corrido fica
+   ilegível, então não sai destes dois lugares. */
 .proof__n{
   display:block;font-family:var(--display);font-weight:600;line-height:.86;
-  font-size:clamp(2.4rem,7vw,4.6rem);color:var(--paper);letter-spacing:-.01em;
+  font-size:clamp(2.4rem,7vw,4.6rem);letter-spacing:-.01em;
+  color:var(--paper);
+  background:linear-gradient(100deg,#8B8E96 0%,#E3E5EA 45%,#9A9DA5 72%,#D6D9DF 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+@supports not ((-webkit-background-clip:text) or (background-clip:text)){
+  .proof__n{-webkit-text-fill-color:currentColor;background:none}
 }
 .proof__l{
   display:block;color:var(--steel);font-size:13.5px;line-height:1.35;
@@ -274,7 +312,7 @@ p:last-child{margin-bottom:0}
    dele explicado — por isso a banda dele é outra.
    ------------------------------------------------------------------------ */
 .bio{position:relative;display:grid;grid-template-columns:1fr;gap:26px;align-items:center}
-.bio + .bio{margin-top:clamp(64px,8vw,116px)}
+.bio + .bio{margin-top:clamp(44px,5.6vw,80px)}
 @media (min-width:900px){
   .bio{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:56px}
 }
@@ -322,6 +360,19 @@ p:last-child{margin-bottom:0}
 .bio__unit{display:block;margin:8px 0 20px;color:var(--steel)}
 .bio p{max-width:46ch}
 
+/* Sávio e Paulo dividem uma faixa. A foto deixa de sangrar e volta para dentro
+   da coluna, senão as duas brigariam pela borda direita. */
+.bio-duo{display:grid;grid-template-columns:1fr;gap:clamp(40px,5vw,64px)}
+.bio-duo .bio + .bio{margin-top:0}
+@media (min-width:900px){
+  .bio-duo{grid-template-columns:1fr 1fr;gap:clamp(32px,3.5vw,52px)}
+  .bio--meia{display:block}
+  .bio--meia .bio__shot{margin-right:0;aspect-ratio:4/5;margin-bottom:24px}
+  .bio--meia .bio__name{font-size:clamp(1.9rem,3.4vw,2.6rem)}
+  .bio--meia .bio__num{font-size:clamp(1.7rem,2.8vw,2.1rem)}
+  .bio--meia p{max-width:none;font-size:15.5px}
+}
+
 
 /* ---------- A operação — momento tipográfico ---------------------------- */
 .now{text-align:left}
@@ -352,7 +403,7 @@ p:last-child{margin-bottom:0}
 }
 .now__n.is-on .now__d{opacity:1;transform:none}
 .now__u{display:block;margin-top:18px;max-width:30ch;font-size:clamp(1.1rem,2.6vw,1.5rem);line-height:1.3;color:var(--steel-lo)}
-.now__note{margin-top:34px;padding-top:22px;border-top:1px solid var(--line-d);max-width:52ch;color:var(--steel)}
+.now__note{margin-top:26px;padding-top:22px;border-top:1px solid var(--line-d);max-width:52ch;color:var(--steel)}
 
 /* ---------- O método — trilha ------------------------------------------
    Sem grid de cards. As 8 etapas descem ao longo do próprio rastro; cada
@@ -395,6 +446,18 @@ p:last-child{margin-bottom:0}
 .leg p{max-width:48ch;margin:0;color:var(--steel)}
 .leg.is-on p{color:var(--steel-lo)}
 
+/* No desktop a descrição vai para a direita do título, senão o método lê como
+   um índice de oito palavras soltas. No celular continua empilhado. */
+@media (min-width:900px){
+  .leg{
+    display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+    column-gap:clamp(32px,4vw,64px);
+  }
+  .leg__n{grid-column:1 / -1}
+  .leg__t{grid-column:1;margin-bottom:0}
+  .leg p{grid-column:2;max-width:46ch;padding-top:.42em}
+}
+
 /* ---------- Virada preto → branco --------------------------------------
    A troca de fundo é um momento da narrativa: a palavra atravessa as duas
    metades, clara em cima e escura embaixo. Duas cópias sobrepostas, cada
@@ -415,7 +478,7 @@ p:last-child{margin-bottom:0}
 .cross__word--d{position:absolute;inset:0;color:var(--ink);clip-path:inset(50% 0 0 0)}
 
 /* ---------- Como funciona — sem caixas ---------------------------------- */
-.how{margin-top:clamp(40px,5vw,60px);border-top:1px solid var(--line-l)}
+.how{margin-top:clamp(28px,3.5vw,42px);border-top:1px solid var(--line-l)}
 .how__row{
   display:grid;grid-template-columns:1fr;gap:6px;
   padding:20px 0;border-bottom:1px solid var(--line-l);
@@ -424,6 +487,23 @@ p:last-child{margin-bottom:0}
 .how__k{color:var(--ink);font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
 @media (min-width:768px){ .how__k{font-size:11px} }
 .how__v{margin:0;color:var(--ink-60);font-size:16px;line-height:1.55}
+
+/* ---------- Para quem é ------------------------------------------------
+   Mesmo traço curto da lista da oferta. Sem checkmark verde nem X vermelho:
+   a coluna negativa ganha credibilidade por ser sóbria, não por ser alarme.
+   ------------------------------------------------------------------------ */
+.fit{display:grid;grid-template-columns:1fr;gap:clamp(28px,4vw,56px);margin-top:clamp(28px,3.5vw,44px)}
+@media (min-width:768px){ .fit{grid-template-columns:1fr 1fr} }
+.fit__h{
+  font-family:var(--display);font-weight:700;text-transform:uppercase;
+  font-size:clamp(1.05rem,2.4vw,1.3rem);line-height:1;color:var(--ink);
+  margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid var(--line-l);
+}
+.fit ul{list-style:none;margin:0;padding:0}
+.fit li{position:relative;padding:0 0 13px 22px;color:var(--ink);font-size:16px;line-height:1.5}
+.fit li:last-child{padding-bottom:0}
+.fit li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:1px;background:currentColor;opacity:.55}
+.fit__col--nao .fit__h,.fit__col--nao li{color:var(--ink-60)}
 
 /* ---------- Números grandes soltos, sem caixa --------------------------- */
 /* Três itens curtos: no celular ficam lado a lado em vez de empilhados.
@@ -463,16 +543,29 @@ p:last-child{margin-bottom:0}
    bloco claro-sobre-escuro dentro da área clara. Sem isso ele era só mais um
    número grande numa seção visualmente igual às vizinhas. */
 .deal__buy{
+  position:relative;overflow:hidden;
   background:var(--deep);color:var(--steel-lo);
-  padding:clamp(26px,3.4vw,38px);border-radius:3px;
+  padding:clamp(32px,4vw,48px);border-radius:3px;
 }
+/* Brilho fraquíssimo atrás do preço: dá volume ao bloco sem acender mais um
+   vermelho chapado na página. */
+.deal__buy::before{
+  content:"";position:absolute;left:-10%;top:-40%;width:120%;height:130%;pointer-events:none;
+  background:radial-gradient(ellipse 50% 45% at 30% 40%, rgba(199,48,14,.16), transparent 70%);
+}
+.deal__buy > *{position:relative}
 .deal__buy .deal__what{color:var(--steel)}
 .deal__price{
-  display:block;font-family:var(--display);font-weight:600;line-height:.84;
-  font-size:clamp(5.2rem,17vw,9rem);color:var(--paper);letter-spacing:-.025em;
+  display:block;font-family:var(--display);font-weight:600;line-height:.82;
+  font-size:clamp(6.2rem,21vw,11rem);color:var(--paper);letter-spacing:-.03em;
+  margin-top:4px;
 }
-.deal__terms{display:block;margin-top:14px;color:var(--steel)}
+.deal__terms{display:block;margin-top:16px;color:var(--steel)}
+.deal__buy .cta{margin-top:28px}
 .deal__buy .cta .mono{color:var(--steel)}
+/* Botão em largura cheia dentro do card: é o clique que a página inteira
+   estava construindo. */
+.deal__buy .btn{display:flex;width:100%;min-height:60px;font-size:1.22rem}
 .deal__why{
   margin-top:clamp(30px,3.6vw,44px);padding-top:24px;
   border-top:1px solid var(--line-l);max-width:56ch;
@@ -480,7 +573,7 @@ p:last-child{margin-bottom:0}
 }
 
 /* ---------- FAQ --------------------------------------------------------- */
-.faq{margin-top:clamp(36px,4vw,54px);max-width:74ch}
+.faq{margin-top:clamp(24px,2.8vw,38px);max-width:74ch}
 .faq details{border-top:1px solid var(--line-l)}
 .faq details:last-of-type{border-bottom:1px solid var(--line-l)}
 .faq summary{
@@ -504,7 +597,12 @@ p:last-child{margin-bottom:0}
 .end h2{max-width:15ch}
 .end .sig{color:var(--signal);text-transform:lowercase}
 .end .lede{margin-top:28px;max-width:50ch}
-.foot{border-top:1px solid var(--line-d);margin-top:clamp(60px,7vw,96px);padding-top:32px}
+.foot{margin-top:clamp(60px,7vw,96px);padding-top:32px;position:relative}
+.foot::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,#8B8E96 12%,#E3E5EA 45%,#9A9DA5 72%,#D6D9DF 88%,transparent);
+  opacity:.6;
+}
 .foot__note{max-width:70ch;color:var(--steel);font-size:13px;line-height:1.6}
 /* inline-block com padding: sem isto o alvo de toque fica em 16px de altura. */
 .foot__legal{margin:2px 0 0;display:flex;flex-wrap:wrap;gap:0 26px}
@@ -525,7 +623,7 @@ p:last-child{margin-bottom:0}
 .dock__info{flex:1;min-width:0;color:var(--steel)}
 .dock__p{display:block;font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:1.3rem;line-height:1;color:var(--paper);margin-top:3px}
 .dock .btn{min-height:46px;padding:0 20px;font-size:1rem;flex:none;width:auto}
-@media (min-width:768px){ .dock{display:none} }
+@media (min-width:900px){ .dock{display:none} }
 /* Respiração lenta, só no botão principal do celular. Nenhum outro elemento
    da página anima em loop. */
 @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.022)}}
@@ -535,8 +633,8 @@ p:last-child{margin-bottom:0}
 /* ---------- Cookies ----------------------------------------------------- */
 .consent{position:fixed;z-index:70;left:12px;right:12px;bottom:12px;display:none;background:var(--deep-2);border:1px solid var(--line-d);border-radius:2px;padding:17px}
 .consent.is-open{display:block}
-@media (max-width:767px){ .consent{bottom:86px} }
-@media (min-width:768px){ .consent{left:auto;right:24px;bottom:24px;max-width:390px} }
+@media (max-width:899px){ .consent{bottom:86px} }
+@media (min-width:900px){ .consent{left:auto;right:24px;bottom:24px;max-width:390px} }
 .consent p{font-size:14px;line-height:1.5;color:var(--steel-lo);margin:0 0 13px}
 .consent a{color:var(--paper)}
 .consent__row{display:flex;gap:10px}
@@ -593,6 +691,7 @@ p:last-child{margin-bottom:0}
         </svg>
         RASTRO
       </a>
+      <span class="brand__sig mono">Performance Comercial</span>
     </div>
   </header>
 
@@ -601,11 +700,17 @@ p:last-child{margin-bottom:0}
 <!-- ===== 1 — TOPO ====================================================== -->
 <section class="sec hero on-deep">
   <div class="wrap hero__inner">
-    <h1 class="rise">
+    <!-- A frase antiga não sumiu: virou linha de apoio acima do H1, menor, com
+         a palavra girando aqui em vez de na headline. -->
+    <p class="kicker rise">
       <span class="sr-only">Seu mês bom não pode depender de sorte.</span>
-      <span class="h1-a" aria-hidden="true">Seu mês bom</span>
-      <span class="h1-b" aria-hidden="true">não pode depender de</span>
-      <span class="h1-c" aria-hidden="true"><span class="rot" data-rot><span class="rot__w">sorte.</span></span></span>
+      <span aria-hidden="true">Seu mês bom não pode depender de </span><span class="rot" data-rot aria-hidden="true"><span class="rot__w">sorte.</span></span>
+    </p>
+
+    <h1 class="rise">
+      <span class="h1-a">A experiência</span>
+      <span class="h1-b">de quem vende,</span>
+      <span class="h1-c dim">transformada em método.</span>
     </h1>
 
     <!-- O que está sendo vendido tem que ficar claro aqui, não três seções
@@ -613,11 +718,12 @@ p:last-child{margin-bottom:0}
          primeira turma, 20 pessoas. -->
     <p class="lede rise">Gabriel, Sávio e Paulo comercializaram mais de R$17 milhões e seguem vendendo todo dia. Na Turma Fundadora eles abrem ao vivo o processo que usam — para 20 pessoas, na primeira turma da RASTRO.</p>
 
-    <div class="cta rise">
+    <div class="cta cta--dupla rise">
       <a class="btn" href="#oferta" data-cta="cta_hero">
         Quero a Turma Fundadora
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9.5M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
+      <a class="btn btn--fantasma" href="#a-empresa">Conhecer a RASTRO</a>
     </div>
   </div>
 
@@ -635,15 +741,29 @@ p:last-child{margin-bottom:0}
   </div>
 </section>
 
-<!-- ===== 2 — FUNDADORES ================================================
-     Gabriel e Sávio são a origem do método — por isso "duas trajetórias".
-     Paulo entra depois, numa banda diferente, com o papel dele explicado.
+<!-- ===== 2 — O QUE É A RASTRO ==========================================
+     Destino do botão fantasma do topo. Responde "o que é isso" antes de a
+     página começar a vender.
      ==================================================================== -->
+<section class="sec on-deep" id="a-empresa">
+  <div class="wrap col">
+    <p class="label rise">A empresa</p>
+    <h2 class="rise" style="max-width:22ch">Não é um curso. <span class="dim">É uma empresa de vendas que resolveu ensinar.</span></h2>
+
+    <div class="lede rise" style="margin-top:clamp(24px,3vw,34px);max-width:60ch">
+      <p>A RASTRO é uma empresa de desenvolvimento comercial. Ela não nasceu de uma pesquisa sobre o que vende bem na internet — nasceu de três operações reais que deram certo e foram unificadas em um processo só.</p>
+      <p>Gabriel, Sávio e Paulo juntaram o que cada um já fazia: as estratégias, as técnicas, os erros que custaram caro e os acertos que se repetiram. O que sobrou dessa filtragem virou a metodologia RASTRO.</p>
+      <p>Todo resultado deixa um rastro. O nosso tem oito etapas — e é ele que a gente abre na Turma Fundadora.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3 — FUNDADORES ================================================ -->
 <section class="sec on-deep">
   <div class="wrap col">
-    <h2 class="rise" style="max-width:20ch">Três trajetórias. <span class="dim">Uma metodologia.</span></h2>
+    <h2 class="rise" style="max-width:20ch">Três trajetórias.<br><span class="dim">Milhões comercializados.<br>Uma metodologia.</span></h2>
 
-    <div style="margin-top:clamp(48px,6vw,84px)">
+    <div style="margin-top:clamp(34px,4.2vw,58px)">
       <article class="bio rise">
         <div class="bio__text">
           <span class="bio__role mono">Founder &amp; CEO</span>
@@ -658,7 +778,11 @@ p:last-child{margin-bottom:0}
         </figure>
       </article>
 
-      <article class="bio rise">
+      <!-- Sávio e Paulo em meia altura, lado a lado no desktop: três telas
+           cheias antes do método era peso demais. O Gabriel fica inteiro
+           porque é dele o R$1M/mês. -->
+      <div class="bio-duo">
+      <article class="bio bio--meia rise">
         <div class="bio__text">
           <span class="bio__role mono">Co-Founder &amp; COO</span>
           <h3 class="bio__name">Sávio</h3>
@@ -672,19 +796,20 @@ p:last-child{margin-bottom:0}
         </figure>
       </article>
 
-      <article class="bio rise">
+      <article class="bio bio--meia rise">
         <div class="bio__text">
           <span class="bio__role mono">Co-Founder &amp; Head of Sales</span>
           <h3 class="bio__name">Paulo</h3>
           <span class="bio__num">+R$7M</span>
           <span class="bio__unit mono">Comercializados</span>
-          <p>Mais de R$7 milhões comercializados. Aos 29 anos, responde pela operação de vendas da RASTRO: é quem roda o processo todo dia e cobra o resultado dele — e quem vai acompanhar a sua venda durante a turma.</p>
+          <p>Aos 29 anos, responde pela operação de vendas da RASTRO: é quem roda o processo todo dia e cobra o resultado dele — e quem vai acompanhar a sua venda durante a turma.</p>
         </div>
         <figure class="bio__shot shot--p">
           <img src="fotos/paulo.webp" width="640" height="800" alt="Paulo, Co-Founder e Head of Sales da RASTRO" loading="lazy" decoding="async">
           <span class="bio__fb" aria-hidden="true">P</span>
         </figure>
       </article>
+      </div><!-- /.bio-duo -->
     </div>
   </div>
 </section>
@@ -751,6 +876,16 @@ p:last-child{margin-bottom:0}
       <li class="leg"><span class="leg__dot" aria-hidden="true"></span><span class="leg__n mono">Etapa 07</span><h3 class="leg__t">Fechamento</h3><p>Pedir a venda na hora certa, com a palavra certa.</p></li>
       <li class="leg"><span class="leg__dot" aria-hidden="true"></span><span class="leg__n mono">Etapa 08</span><h3 class="leg__t">Indicação</h3><p>Transformar cliente fechado em dois novos clientes.</p></li>
     </ol>
+
+    <!-- Sem este CTA havia ~8 telas de rolagem entre o botão do topo e o
+         próximo — tempo demais para quem chegou decidido. -->
+    <div class="cta rise">
+      <a class="btn" href="#oferta" data-cta="cta_metodo">
+        Quero fazer parte da RASTRO
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9.5M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <p class="mono">20 vagas · R$297 · pagamento único</p>
+    </div>
   </div>
 </section>
 
@@ -765,6 +900,37 @@ p:last-child{margin-bottom:0}
   <p class="cross__word cross__word--d"><span>Turma</span><span>Fundadora</span></p>
 </section>
 <h2 class="sr-only">Turma Fundadora</h2>
+
+<!-- ===== PARA QUEM É ===================================================
+     Fica depois da virada, não antes: a seção é de fundo claro, e colocá-la
+     entre a etapa 08 e a virada abriria uma faixa clara no meio do escuro.
+     ==================================================================== -->
+<section class="sec on-paper">
+  <div class="wrap col">
+    <p class="label rise">Para quem é</p>
+    <h2 class="rise" style="max-width:18ch">Para quem é. <span class="dim">E para quem não é.</span></h2>
+
+    <div class="fit rise">
+      <div class="fit__col">
+        <h3 class="fit__h">É pra você se:</h3>
+        <ul>
+          <li>Você já vende e quer parar de depender de improviso.</li>
+          <li>Você vende o próprio serviço e trava na hora de falar o preço.</li>
+          <li>Você está começando em vendas e quer aprender o processo certo antes de criar vício.</li>
+          <li>Você quer aplicar durante a turma, não só assistir.</li>
+        </ul>
+      </div>
+      <div class="fit__col fit__col--nao">
+        <h3 class="fit__h">Não é pra você se:</h3>
+        <ul>
+          <li>Você quer fórmula pronta sem fazer prospecção.</li>
+          <li>Você quer só guardar mais um conteúdo pra ver depois.</li>
+          <li>Você não tem nada pra vender e nem pretende ter.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ===== 6 — COMO FUNCIONA ============================================= -->
 <section class="sec on-paper">
@@ -851,9 +1017,12 @@ p:last-child{margin-bottom:0}
 <!-- ===== 8 — OBJEÇÕES ================================================== -->
 <section class="sec on-paper on-paper-2">
   <div class="wrap col">
-    <h2 class="rise" style="max-width:16ch">O que passa <span class="dim">na sua cabeça agora.</span></h2>
+    <h2 class="rise" style="max-width:16ch">Perguntas <span class="dim">antes de decidir.</span></h2>
 
-    <div class="faq rise">
+    <!-- Dois grupos: objeções primeiro (são elas que convertem), operacionais
+         depois (são as que a pessoa procura quando já decidiu). -->
+    <p class="label rise" style="margin-top:clamp(28px,3.4vw,44px)">O que passa na sua cabeça</p>
+    <div class="faq rise" style="margin-top:0">
       <details>
         <summary>“Já tentei curso de vendas e não mudou nada.”</summary>
         <div class="faq__a">
@@ -903,6 +1072,51 @@ p:last-child{margin-bottom:0}
         </div>
       </details>
     </div>
+
+    <p class="label rise" style="margin-top:clamp(38px,4.5vw,62px)">Dúvidas práticas</p>
+    <div class="faq rise" style="margin-top:0">
+      <details>
+        <summary>Para quem é a RASTRO?</summary>
+        <div class="faq__a">
+          <p>Pra quem vende ou quer vender com performance: vendedor, closer, SDR, autônomo, prestador de serviço que negocia o próprio trabalho.</p>
+          <p>Serve tanto pra quem já vende quanto pra quem está começando.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Como funciona?</summary>
+        <div class="faq__a">
+          <!-- PENDENTE — confirmar com o cliente: duração, frequência, dia,
+               horário e data de início. Assim que vierem, entram nesta resposta
+               e nas linhas da seção "Como funciona na prática". -->
+          <p>Encontros ao vivo com Gabriel, Sávio e Paulo, cobrindo os 8 pilares do método, com scripts liberados ao longo do caminho e um grupo de acompanhamento direto.</p>
+        </div>
+      </details>
+      <details>
+        <summary>O que está incluso?</summary>
+        <div class="faq__a">
+          <p>Metodologia completa dos 8 pilares, encontros ao vivo, scripts de abordagem, negociação e follow-up, matriz de objeções, grupo de acompanhamento e revisão das suas vendas reais.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Como recebo o acesso?</summary>
+        <div class="faq__a">
+          <p>Assim que a compra é aprovada na Hotmart, o acesso chega no e-mail cadastrado, junto com o convite para o grupo da turma.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Qual o investimento?</summary>
+        <div class="faq__a">
+          <p>R$297, pagamento único. Cartão, Pix ou boleto, via Hotmart.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Como funciona o acompanhamento?</summary>
+        <div class="faq__a">
+          <p>Você traz sua venda travada e a gente destrava junto, durante a turma.</p>
+          <p>É contato direto com os três fundadores, não é suporte por ticket.</p>
+        </div>
+      </details>
+    </div>
   </div>
 </section>
 
@@ -935,10 +1149,10 @@ p:last-child{margin-bottom:0}
 
 <div class="dock" data-dock>
   <div class="dock__info">
-    <span class="mono">Turma Fundadora</span>
+    <span class="mono">Turma Fundadora · 20 vagas</span>
     <span class="dock__p">R$297</span>
   </div>
-  <a class="btn" href="#oferta" data-cta="cta_dock">Vaga</a>
+  <a class="btn" href="#oferta" data-cta="cta_sticky">Garantir vaga</a>
 </div>
 
 <div class="consent" data-consent role="dialog" aria-live="polite" aria-label="Aviso de cookies">
@@ -1091,7 +1305,11 @@ p:last-child{margin-bottom:0}
         io.unobserve(en.target);
       });
       catchUp();
-    }, { rootMargin:'0px 0px -10% 0px', threshold:.12 });
+    /* threshold:0 dispara assim que 1px entra. Com .12 um bloco alto precisava
+       de 12% da própria altura visível — em seções de tela cheia isso só
+       acontecia perto do centro da viewport, e quem rolava rápido via tela
+       preta por duas telas achando que a página tinha quebrado. */
+    }, { rootMargin:'0px 0px -12% 0px', threshold:0 });
     Array.prototype.forEach.call(risers, function(el){ io.observe(el); });
 
     /* Rede de segurança: revela tudo se o observador não deu sinal de vida.
