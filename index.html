@@ -1383,6 +1383,64 @@ p:last-child{margin-bottom:0}
     }, { threshold:0 }).observe(hero);
   }
 
+  /* ---------- Rolagem suave do "Saiba mais" -----------------------------
+     O scroll-behavior:smooth do CSS já resolveria, mas a duração fica a
+     critério do navegador — nesta distância o Chrome faz em ~400ms, seco
+     demais para a sensação de câmera deslizando. Este tween controla os
+     ~820ms pedidos com easeInOutCubic: acelera, desacelera, sem repique.
+     Roda só durante a animação; não é cálculo contínuo de scroll.
+     --------------------------------------------------------------------- */
+  function rolarSuave(alvo, duracao){
+    var margem  = parseFloat(getComputedStyle(alvo).scrollMarginTop) || 0;
+    var limite  = document.documentElement.scrollHeight - window.innerHeight;
+    var destino = alvo.getBoundingClientRect().top + window.pageYOffset - margem;
+    destino = Math.max(0, Math.min(destino, limite));
+
+    var inicio = window.pageYOffset;
+    var dist   = destino - inicio;
+    if (Math.abs(dist) < 2) return;
+
+    var t0 = 0, cancelado = false;
+    // Se a pessoa rolar no meio do caminho, a animação sai da frente na hora.
+    function desistir(){ cancelado = true; }
+    var opts = { passive:true };
+    window.addEventListener('wheel', desistir, opts);
+    window.addEventListener('touchstart', desistir, opts);
+    window.addEventListener('keydown', desistir);
+
+    function limpar(){
+      window.removeEventListener('wheel', desistir, opts);
+      window.removeEventListener('touchstart', desistir, opts);
+      window.removeEventListener('keydown', desistir);
+    }
+    function passo(agora){
+      if (cancelado) return limpar();
+      if (!t0) t0 = agora;
+      var k = Math.min(1, (agora - t0) / duracao);
+      var e = k < .5 ? 4*k*k*k : 1 - Math.pow(-2*k + 2, 3) / 2;
+      window.scrollTo(0, inicio + dist * e);
+      if (k < 1) window.requestAnimationFrame(passo); else limpar();
+    }
+    window.requestAnimationFrame(passo);
+  }
+
+  function setupSaibaMais(){
+    var link = document.querySelector('.saiba');
+    if (!link) return;
+    link.addEventListener('click', function(ev){
+      var alvo = document.querySelector(link.getAttribute('href'));
+      if (!alvo) return;                       // sem destino, deixa o link agir
+      ev.preventDefault();
+      if (reduce || !window.requestAnimationFrame) {
+        alvo.scrollIntoView();                 // salto direto, como pede o reduced-motion
+      } else {
+        rolarSuave(alvo, 820);
+      }
+      // replaceState em vez de push: não suja o histórico com um passo extra.
+      if (history.replaceState) history.replaceState(null, '', link.getAttribute('href'));
+    });
+  }
+
   /* ---------- Partida --------------------------------------------------- */
   /* ---------- Loop de scroll --------------------------------------------
      Um único listener passivo, estrangulado por frame. O trabalho por frame é
@@ -1420,6 +1478,7 @@ p:last-child{margin-bottom:0}
   setupFigs();
   setupDock();
   setupDepth();
+  setupSaibaMais();
 
 })();
 </script>
