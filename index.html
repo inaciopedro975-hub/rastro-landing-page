@@ -211,8 +211,6 @@ p:last-child{margin-bottom:0}
 
 /* ---------- Hero -------------------------------------------------------- */
 .top{padding-block:26px 0;position:relative;z-index:5;background:transparent}
-/* A assinatura da marca precisa existir na primeira tela, não só no <title>. */
-.brand__sig{display:block;margin-top:9px;color:var(--steel)}
 .brand{
   display:inline-flex;align-items:center;gap:11px;text-decoration:none;
   font-family:var(--display);font-weight:700;text-transform:uppercase;
@@ -227,31 +225,9 @@ p:last-child{margin-bottom:0}
 }
 .hero__inner{text-align:center;display:flex;flex-direction:column;align-items:center}
 
-/* Linha de apoio acima do H1: recebeu a frase que antes era a headline. */
-.kicker{
-  font-family:var(--display);font-weight:700;text-transform:uppercase;
-  font-size:clamp(.95rem,2.2vw,1.25rem);line-height:1.1;letter-spacing:.02em;
-  color:var(--steel);margin:0 0 clamp(16px,2.2vw,24px);
-}
-/* --signal-lift, não --signal: aqui a palavra virou texto pequeno (15px) e o
-   vermelho puro dá 3.53:1 sobre o escuro, reprovando em AA. O tom levantado
-   dá 4.57:1. Na headline antiga isso não importava porque era texto grande. */
-.kicker .rot{color:var(--signal-lift);height:1.05em}
-
 /* Três linhas do mesmo corpo: a frase do cliente é uma sentença só e quebrar
    em tamanhos diferentes descaracterizava a leitura dela. */
 .h1-a,.h1-b,.h1-c{display:block;line-height:.94}
-/* text-align:center é obrigatório aqui: o slot tem a largura da palavra mais
-   longa ("carisma."), então sem isso as curtas encostam na esquerda e a
-   headline parece desalinhada a cada troca. */
-.rot{
-  display:inline-block;position:relative;overflow:hidden;vertical-align:bottom;
-  height:.94em;color:var(--signal);text-align:center;
-}
-.rot__w{display:block;transition:transform 520ms var(--ease),opacity 520ms var(--ease)}
-.rot__w.is-out{transform:translateY(-104%);opacity:0}
-.rot__w.is-next{position:absolute;left:0;right:0;top:0;transform:translateY(104%);opacity:0}
-.rot__w.is-next.is-in{transform:translateY(0);opacity:1}
 
 .hero .lede{margin-top:clamp(20px,2.6vw,30px);max-width:50ch;color:var(--steel-lo)}
 .hero .cta{margin-top:clamp(26px,3vw,36px)}
@@ -360,18 +336,6 @@ p:last-child{margin-bottom:0}
 .bio__unit{display:block;margin:8px 0 20px;color:var(--steel)}
 .bio p{max-width:46ch}
 
-/* Sávio e Paulo dividem uma faixa. A foto deixa de sangrar e volta para dentro
-   da coluna, senão as duas brigariam pela borda direita. */
-.bio-duo{display:grid;grid-template-columns:1fr;gap:clamp(40px,5vw,64px)}
-.bio-duo .bio + .bio{margin-top:0}
-@media (min-width:900px){
-  .bio-duo{grid-template-columns:1fr 1fr;gap:clamp(32px,3.5vw,52px)}
-  .bio--meia{display:block}
-  .bio--meia .bio__shot{margin-right:0;aspect-ratio:4/5;margin-bottom:24px}
-  .bio--meia .bio__name{font-size:clamp(1.9rem,3.4vw,2.6rem)}
-  .bio--meia .bio__num{font-size:clamp(1.7rem,2.8vw,2.1rem)}
-  .bio--meia p{max-width:none;font-size:15.5px}
-}
 
 
 /* ---------- A operação — momento tipográfico ---------------------------- */
@@ -691,7 +655,6 @@ p:last-child{margin-bottom:0}
         </svg>
         RASTRO
       </a>
-      <span class="brand__sig mono">Performance Comercial</span>
     </div>
   </header>
 
@@ -700,13 +663,6 @@ p:last-child{margin-bottom:0}
 <!-- ===== 1 — TOPO ====================================================== -->
 <section class="sec hero on-deep">
   <div class="wrap hero__inner">
-    <!-- A frase antiga não sumiu: virou linha de apoio acima do H1, menor, com
-         a palavra girando aqui em vez de na headline. -->
-    <p class="kicker rise">
-      <span class="sr-only">Seu mês bom não pode depender de sorte.</span>
-      <span aria-hidden="true">Seu mês bom não pode depender de </span><span class="rot" data-rot aria-hidden="true"><span class="rot__w">sorte.</span></span>
-    </p>
-
     <h1 class="rise">
       <span class="h1-a">A experiência</span>
       <span class="h1-b">de quem vende,</span>
@@ -778,11 +734,7 @@ p:last-child{margin-bottom:0}
         </figure>
       </article>
 
-      <!-- Sávio e Paulo em meia altura, lado a lado no desktop: três telas
-           cheias antes do método era peso demais. O Gabriel fica inteiro
-           porque é dele o R$1M/mês. -->
-      <div class="bio-duo">
-      <article class="bio bio--meia rise">
+      <article class="bio rise">
         <div class="bio__text">
           <span class="bio__role mono">Co-Founder &amp; COO</span>
           <h3 class="bio__name">Sávio</h3>
@@ -796,7 +748,7 @@ p:last-child{margin-bottom:0}
         </figure>
       </article>
 
-      <article class="bio bio--meia rise">
+      <article class="bio rise">
         <div class="bio__text">
           <span class="bio__role mono">Co-Founder &amp; Head of Sales</span>
           <h3 class="bio__name">Paulo</h3>
@@ -809,7 +761,6 @@ p:last-child{margin-bottom:0}
           <span class="bio__fb" aria-hidden="true">P</span>
         </figure>
       </article>
-      </div><!-- /.bio-duo -->
     </div>
   </div>
 </section>
@@ -1396,57 +1347,6 @@ p:last-child{margin-bottom:0}
     });
   }
 
-  /* ---------- Palavra giratória ----------------------------------------- */
-  var rot = document.querySelector('[data-rot]');
-  if (rot && !reduce) {
-    var words = ['sorte.','humor.','carisma.','milagre.'];
-    var i = 0, busy = false;
-
-    /* Trava a largura na palavra mais longa, senão a headline pula a cada
-       troca. Precisa rodar DEPOIS das fontes: medido na fonte de fallback o
-       valor sai errado e muda sozinho quando a Big Shoulders chega — que é
-       exatamente o pulo que se via no celular. Remede no resize porque o
-       corpo do título é em vw. */
-    function travarLargura(){
-      var probe = document.createElement('span');
-      probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap';
-      rot.appendChild(probe);
-      var max = 0;
-      words.forEach(function(w){ probe.textContent = w; max = Math.max(max, probe.offsetWidth); });
-      probe.remove();
-      rot.style.minWidth = Math.ceil(max) + 'px';
-    }
-
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(travarLargura);
-    } else {
-      travarLargura();
-    }
-    var reTravar;
-    window.addEventListener('resize', function(){
-      window.clearTimeout(reTravar);
-      reTravar = window.setTimeout(travarLargura, 200);
-    }, { passive:true });
-
-    window.setInterval(function(){
-      if (busy || document.hidden) return;
-      busy = true;
-      var cur  = rot.querySelector('.rot__w');
-      var next = document.createElement('span');
-      next.className = 'rot__w is-next';
-      next.textContent = words[(i + 1) % words.length];
-      rot.appendChild(next);
-      void next.offsetWidth;                 // reflow: a transição parte do estado inicial
-      cur.classList.add('is-out');
-      next.classList.add('is-in');
-      window.setTimeout(function(){
-        cur.remove();
-        next.classList.remove('is-next','is-in');
-        i = (i + 1) % words.length;
-        busy = false;
-      }, 560);
-    }, 2400);
-  }
 
   /* ---------- Chegada do +R$1M ------------------------------------------
      Só liga a classe; quem anima é o CSS.
