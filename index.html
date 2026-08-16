@@ -1418,7 +1418,11 @@ p:last-child{margin-bottom:0}
       if (!t0) t0 = agora;
       var k = Math.min(1, (agora - t0) / duracao);
       var e = k < .5 ? 4*k*k*k : 1 - Math.pow(-2*k + 2, 3) / 2;
-      window.scrollTo(0, inicio + dist * e);
+      /* behavior:'instant' é obrigatório aqui. O html tem scroll-behavior:
+         smooth, e isso vale também para scroll programático — sem forçar
+         instantâneo, cada frame do tween abriria uma rolagem suave própria e
+         o movimento ficaria travado, com duração errada. */
+      window.scrollTo({ top: inicio + dist * e, behavior: 'instant' });
       if (k < 1) window.requestAnimationFrame(passo); else limpar();
     }
     window.requestAnimationFrame(passo);
@@ -1431,8 +1435,14 @@ p:last-child{margin-bottom:0}
       var alvo = document.querySelector(link.getAttribute('href'));
       if (!alvo) return;                       // sem destino, deixa o link agir
       ev.preventDefault();
-      if (reduce || !window.requestAnimationFrame) {
-        alvo.scrollIntoView();                 // salto direto, como pede o reduced-motion
+      /* Este é o único movimento da página que ignora prefers-reduced-motion,
+         e de propósito: ele só acontece quando a pessoa clica, é curto, e o
+         salto instantâneo desorienta mais do que o deslize. Todo o resto da
+         página continua respeitando a preferência.
+         Para voltar a respeitar aqui também, troque a condição por
+         `if (reduce || !window.requestAnimationFrame)`. */
+      if (!window.requestAnimationFrame) {
+        alvo.scrollIntoView();
       } else {
         rolarSuave(alvo, 820);
       }
