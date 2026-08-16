@@ -41,10 +41,13 @@
    arquivos vêm da mesma conexão e com preload, a janela de troca é curta
    demais para virar aquele flash que reprovamos antes.
    -------------------------------------------------------------------------- */
+/* Eixo declarado até 800 porque o arquivo é variável e tem a faixa inteira
+   (medido: 600/700/800 rendem larguras diferentes). Com `600 700` o navegador
+   limitava em 700 e o peso 800 do número dos fundadores não aparecia. */
 @font-face{
   font-family:"Big Shoulders Display";
   src:url("fontes/big-shoulders.woff2") format("woff2");
-  font-weight:600 700;font-style:normal;font-display:swap;
+  font-weight:600 800;font-style:normal;font-display:swap;
 }
 @font-face{
   font-family:"Instrument Sans";
@@ -357,7 +360,9 @@ p:last-child{margin-bottom:0}
 /* O número fica em branco, não em vermelho: a linha do rastro já corre
    vermelha ao lado dele, e dois vermelhos vizinhos anulam um ao outro. O
    tamanho é que carrega o peso aqui. */
-.bio__num{display:block;font-family:var(--display);font-weight:600;line-height:.9;font-size:clamp(2.2rem,5vw,3rem);color:var(--paper)}
+/* Peso 800, como era antes de eu afinar a tipografia toda. Aqui o número é a
+   prova e aguenta o peso cheio. */
+.bio__num{display:block;font-family:var(--display);font-weight:800;line-height:.9;font-size:clamp(2.2rem,5vw,3rem);color:var(--paper)}
 .bio__unit{display:block;margin:8px 0 20px;color:var(--steel)}
 .bio p{max-width:46ch}
 
