@@ -128,9 +128,11 @@ h1,h2,h3{
   font-family:var(--display);font-weight:600;text-transform:uppercase;
   line-height:.94;margin:0;
 }
-/* Menor que antes: a headline nova tem três linhas cheias e precisa caber com
-   a linha de apoio, o parágrafo e os dois botões na primeira tela do celular. */
-h1{font-size:clamp(2.15rem,7.4vw,5.2rem)}
+/* 9.6vw é o teto: a linha mais longa ("transformada em método.") mede 8,73×
+   o corpo da fonte, e precisa caber em 100vw menos o padding lateral. Testado
+   em 390, 768 e 1280 — acima disso ela quebraria em duas linhas e destruiria
+   a estrutura de três. */
+h1{font-size:clamp(2.15rem,9.6vw,5.2rem)}
 h2{font-size:clamp(2rem,5.6vw,3.6rem);text-wrap:balance}
 h3{font-size:1.28rem;font-weight:700}
 p{margin:0 0 1.05rem}
@@ -234,7 +236,9 @@ p:last-child{margin-bottom:0}
 .btn--fantasma{background:transparent;border:1px solid var(--line-d);color:var(--paper)}
 .btn--fantasma:hover{background:rgba(255,255,255,.06);border-color:var(--steel);transform:translateY(-1px)}
 .cta--dupla{display:flex;flex-wrap:wrap;gap:12px}
-@media (max-width:479px){ .cta--dupla{flex-direction:column} }
+/* width:100% no container, senão o flex em coluna encolhe ao conteúdo e os
+   botões saem com 261px de 346 — estreitos e de larguras diferentes entre si. */
+@media (max-width:479px){ .cta--dupla{flex-direction:column;width:100%} }
 .on-paper .cta .mono{color:var(--ink-60)}
 
 /* ---------- Hero -------------------------------------------------------- */
@@ -257,6 +261,11 @@ p:last-child{margin-bottom:0}
    em tamanhos diferentes descaracterizava a leitura dela. */
 .h1-a,.h1-b,.h1-c{display:block;line-height:.94}
 
+/* width:100% é o que libera o tamanho: dentro de um flex com align-items
+   center o h1 encolhia até a linha mais longa (297px de 346 disponíveis) e
+   o clamp nunca conseguia crescer. */
+.hero h1{width:100%;max-width:none}
+
 .hero .lede{margin-top:clamp(20px,2.6vw,30px);max-width:50ch;color:var(--steel-lo)}
 .hero .cta{margin-top:clamp(26px,3vw,36px)}
 
@@ -274,15 +283,13 @@ p:last-child{margin-bottom:0}
   opacity:.75;
 }
 .proof__frame{margin:0 0 clamp(22px,2.6vw,34px);color:var(--steel)}
-/* No celular vira uma pauta: número à esquerda, rótulo à direita, fio de 1px
-   entre as linhas. Empilhado em bloco (número enorme, rótulo, repete) ocupava
-   três telas e os três não liam como um conjunto. */
+/* Número e rótulo alinhados à esquerda, um sob o outro, com fio entre as
+   linhas. A versão com rótulo jogado à direita foi testada e descartada: o
+   texto quebrava em duas linhas e voltava rasgado na margem, e os pares
+   número/rótulo ficavam longe demais um do outro para lerem juntos. */
 .proof__row{display:grid;grid-template-columns:1fr;gap:0}
-.proof__row > *{
-  display:flex;align-items:baseline;justify-content:space-between;gap:16px;
-  padding:14px 0;border-top:1px solid var(--line-d);
-}
-.proof__row > *:first-child{border-top:0;padding-top:4px}
+.proof__row > *{padding:13px 0;border-top:1px solid var(--line-d)}
+.proof__row > *:first-child{border-top:0;padding-top:2px}
 @media (min-width:640px){
   .proof__row{grid-template-columns:repeat(3,1fr)}
   .proof__row > *{display:block;padding:0;border-top:0}
@@ -302,13 +309,8 @@ p:last-child{margin-bottom:0}
 @supports not ((-webkit-background-clip:text) or (background-clip:text)){
   .proof__n{-webkit-text-fill-color:currentColor;background:none}
 }
-.proof__l{
-  display:block;color:var(--steel);font-size:13.5px;line-height:1.35;
-  text-align:right;max-width:15ch;
-}
-@media (min-width:640px){
-  .proof__l{margin-top:12px;font-size:14.5px;text-align:left;max-width:none}
-}
+.proof__l{display:block;margin-top:5px;color:var(--steel);font-size:13.5px;line-height:1.3}
+@media (min-width:640px){ .proof__l{margin-top:12px;font-size:14.5px} }
 
 /* ---------- Fundadores — bandas editoriais ------------------------------
    Sem cards. Foto grande sangrando na direita, texto na coluna do rastro.
@@ -625,17 +627,6 @@ p:last-child{margin-bottom:0}
 .dock .btn:hover,.dock .btn:active{animation:none}
 
 /* ---------- Cookies ----------------------------------------------------- */
-.consent{position:fixed;z-index:70;left:12px;right:12px;bottom:12px;display:none;background:var(--deep-2);border:1px solid var(--line-d);border-radius:2px;padding:17px}
-.consent.is-open{display:block}
-@media (max-width:899px){ .consent{bottom:86px} }
-@media (min-width:900px){ .consent{left:auto;right:24px;bottom:24px;max-width:390px} }
-.consent p{font-size:14px;line-height:1.5;color:var(--steel-lo);margin:0 0 13px}
-.consent a{color:var(--paper)}
-.consent__row{display:flex;gap:10px}
-.consent__btn{flex:1;min-height:44px;border-radius:2px;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--line-d);background:transparent;color:var(--steel-lo)}
-.consent__btn:hover{color:var(--paper)}
-.consent__btn--yes{background:var(--paper);border-color:var(--paper);color:var(--ink)}
-.consent__btn--yes:hover{color:var(--ink)}
 
 /* ---------- Entrada ----------------------------------------------------- */
 .rise{opacity:0;transform:translateY(18px);transition:opacity 700ms var(--ease),transform 700ms var(--ease)}
@@ -865,7 +856,6 @@ p:last-child{margin-bottom:0}
         Quero fazer parte da RASTRO
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9.5M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <p class="mono">20 vagas · R$297 · pagamento único</p>
     </div>
   </div>
 </section>
@@ -1136,14 +1126,6 @@ p:last-child{margin-bottom:0}
   <a class="btn" href="#oferta" data-cta="cta_sticky">Garantir vaga</a>
 </div>
 
-<div class="consent" data-consent role="dialog" aria-live="polite" aria-label="Aviso de cookies">
-  <p>A gente usa cookies para medir o desempenho desta página. Você escolhe. Detalhes na <a href="/politica-de-privacidade">Política de Privacidade</a>.</p>
-  <div class="consent__row">
-    <button class="consent__btn" type="button" data-deny>Recusar</button>
-    <button class="consent__btn consent__btn--yes" type="button" data-allow>Aceitar</button>
-  </div>
-</div>
-
 <script>
 (function(){
   'use strict';
@@ -1224,39 +1206,18 @@ p:last-child{margin-bottom:0}
     });
   }
 
-  /* ---------- Consentimento -------------------------------------------- */
-  var KEY = 'rastro_consent_v1';
-  var bar = document.querySelector('[data-consent]');
+  /* ======================================================================
+     SEM RASTREADORES E SEM AVISO DE COOKIES
 
-  function loadTrackers(){
-    if (CONFIG.metaPixelId && !window.fbq) {
-      (function(f,b,e,v,n,t,s){
-        if(f.fbq)return; n=f.fbq=function(){ n.callMethod ? n.callMethod.apply(n,arguments) : n.queue.push(arguments) };
-        if(!f._fbq)f._fbq=n; n.push=n; n.loaded=!0; n.version='2.0'; n.queue=[];
-        t=b.createElement(e); t.async=!0; t.src=v; s=b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t,s);
-      })(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-      window.fbq('init', CONFIG.metaPixelId); window.fbq('track','PageView');
-    }
-    if (CONFIG.ga4Id && !window.gtag) {
-      var g = document.createElement('script');
-      g.async = true; g.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(CONFIG.ga4Id);
-      document.head.appendChild(g);
-      window.gtag = gtag; gtag('js', new Date()); gtag('config', CONFIG.ga4Id);
-    }
-  }
-  function setConsent(v){
-    try { localStorage.setItem(KEY, v); } catch(e){}
-    if (bar) bar.classList.remove('is-open');
-    if (v === 'granted') loadTrackers();
-  }
-  var stored = null;
-  try { stored = localStorage.getItem(KEY); } catch(e){}
-  if (stored === 'granted') loadTrackers();
-  else if (stored !== 'denied' && bar) bar.classList.add('is-open');
-  if (bar) {
-    bar.querySelector('[data-allow]').addEventListener('click', function(){ setConsent('granted'); });
-    bar.querySelector('[data-deny]').addEventListener('click',  function(){ setConsent('denied');  });
-  }
+     O banner e o carregador de Meta Pixel / GA4 foram removidos: a página não
+     coleta dado de ninguém, não grava nada em localStorage e não abre conexão
+     com terceiro. Por isso não há o que consentir — o aviso era ruído puro.
+
+     SE UM DIA QUISER PIXEL OU GA4 PARA TRÁFEGO PAGO: não basta colar o ID.
+     A LGPD exige consentimento ANTES de carregar o rastreador, então o banner
+     precisa voltar junto. As chamadas track() abaixo já estão nos lugares
+     certos e passam a funcionar sozinhas assim que existir um fbq/gtag.
+     ====================================================================== */
 
   /* ---------- Entrada por scroll --------------------------------------- */
   var risers = document.querySelectorAll('.rise');
