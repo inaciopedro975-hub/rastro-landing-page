@@ -255,9 +255,11 @@ p:last-child{margin-bottom:0}
   font-family:var(--display);font-weight:700;text-transform:uppercase;
   font-size:1.5rem;line-height:1;letter-spacing:.04em;color:var(--paper);
 }
-/* A marca tipográfica é o padrão; a imagem só entra depois de carregar. */
+/* A marca tipográfica é o padrão; a imagem só entra depois de carregar.
+   A logo já traz a assinatura embutida, então ocupa mais altura que o
+   wordmark simples que ela substitui. */
 .brand__txt{display:inline-flex;align-items:center;gap:11px}
-.brand__img{display:none;height:clamp(30px,4.4vw,38px);width:auto}
+.brand__img{display:none;height:clamp(38px,5.6vw,54px);width:auto}
 .brand.com-logo .brand__img{display:block}
 .brand.com-logo .brand__txt{display:none}
 .hero{padding-top:clamp(38px,5.5vw,66px)}
@@ -686,7 +688,7 @@ p:last-child{margin-bottom:0}
            Enquanto o arquivo não existir, o onerror mantém a marca tipográfica
            abaixo, então o cabeçalho nunca fica com ícone quebrado. -->
       <a class="brand" href="#" aria-label="RASTRO — Performance Comercial">
-        <img class="brand__img" src="marca/rastro.png" alt="RASTRO" width="160" height="36" decoding="async">
+        <img class="brand__img" src="marca/rastro.png" alt="RASTRO — Performance Comercial &amp; Desenvolvimento" width="292" height="86" decoding="async" fetchpriority="high">
         <span class="brand__txt">
           <svg width="22" height="26" viewBox="0 0 22 26" aria-hidden="true" focusable="false">
             <rect x="0" y="0" width="3" height="26" fill="#F4F3EF"/>
